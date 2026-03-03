@@ -8,6 +8,7 @@ import { getCategoryMeta } from '../services/gameApi';
 import { PageLayout, Header, SkeletonGrid, EmptyState, ErrorBanner, SortBar } from '../components/Layout';
 import { GameCard } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import SEO, { buildBreadcrumbJsonLd } from '../components/SEO';
 
 export default function Category() {
   const { slug } = useParams();
@@ -26,6 +27,12 @@ export default function Category() {
     <PageLayout
       header={<Header showBack title={`${catInfo.icon} ${catInfo.label}`} />}
     >
+      <SEO
+        title={`${catInfo.label} Games`}
+        description={`Play the best free ${catInfo.label.toLowerCase()} games online. No downloads — instant play in your browser.`}
+        path={`/category/${slug}`}
+        jsonLd={buildBreadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: catInfo.label, path: `/category/${slug}` }])}
+      />
       {/* Category Hero */}
       <motion.div
         initial={{ opacity: 0 }}

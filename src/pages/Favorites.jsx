@@ -8,6 +8,7 @@ import { useCollections } from '../hooks/useCollections';
 import { PageLayout, Header, SectionHeader, EmptyState } from '../components/Layout';
 import { GameCard, FeaturedCard } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import SEO from '../components/SEO';
 
 export default function Favorites() {
   useDocumentTitle('Favorites');
@@ -37,6 +38,12 @@ export default function Favorites() {
         />
       }
     >
+      <SEO
+        title="Favorites"
+        description="Your favorite games, collections, and recently played titles — all in one place."
+        path="/favorites"
+        noindex={true}
+      />
       {/* Favorites Section */}
       <SectionHeader title="My Favorites" icon="❤️" />
       {favorites.length === 0 ? (

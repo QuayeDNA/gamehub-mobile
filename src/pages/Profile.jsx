@@ -10,6 +10,7 @@ import { useTheme } from '../hooks/useTheme';
 import { useToast } from '../components/Toast';
 import { useSourcePrefs } from '../hooks/useSourcePrefs';
 import { SOURCES } from '../services/gameApi';
+import SEO from '../components/SEO';
 
 // ── DiceBear Avatar Configuration ──────────────────────────────────────
 // Free API — generates unique SVG avatars from a seed string.
@@ -186,6 +187,12 @@ export default function Profile() {
 
   return (
     <PageLayout header={<Header showBack title="Profile" showSearch={false} />}>
+      <SEO
+        title="Profile"
+        description="Your GameHub gaming profile, stats, and preferences."
+        path="/profile"
+        noindex={true}
+      />
       {/* Profile Header Card */}
       <div className="px-4 pt-4 pb-2">
         <div className="rounded-2xl overflow-hidden"

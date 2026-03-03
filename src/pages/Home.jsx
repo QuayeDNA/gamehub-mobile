@@ -10,6 +10,7 @@ import { PageLayout, Header, SectionHeader, CategoryPills, SkeletonGrid, Skeleto
 import { GameCard, HorizontalCard, FeaturedCarousel } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import usePWAInstall from '../hooks/usePWAInstall';
+import SEO from '../components/SEO';
 
 const QUICK_CATS = CATEGORIES.slice(0, 8);
 

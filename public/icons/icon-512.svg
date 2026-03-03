@@ -1,7 +1,66 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="80" fill="#0a0a0f"/>
-  <rect x="16" y="16" width="480" height="480" rx="72" fill="none" stroke="#00f5ff" stroke-width="3" opacity="0.3"/>
-  <text x="256" y="200" text-anchor="middle" font-family="monospace" font-size="52" font-weight="900" fill="#00f5ff">GAME</text>
-  <text x="256" y="280" text-anchor="middle" font-family="monospace" font-size="52" font-weight="900" fill="#bf00ff">HUB</text>
-  <text x="256" y="380" text-anchor="middle" font-size="100">🎮</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0f"/>
+      <stop offset="100%" stop-color="#12121a"/>
+    </linearGradient>
+    <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#00f5ff" flood-opacity="0.6"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowPurple" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+      <feFlood flood-color="#bf00ff" flood-opacity="0.5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="controllerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#bf00ff"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#00f5ff" stroke-width="0.3" opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="108" fill="url(#grid)" opacity="0.4"/>
+
+  <!-- Corner accents -->
+  <path d="M 60 20 L 20 20 L 20 60" fill="none" stroke="#00f5ff" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 452 20 L 492 20 L 492 60" fill="none" stroke="#bf00ff" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 60 492 L 20 492 L 20 452" fill="none" stroke="#bf00ff" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 452 492 L 492 492 L 492 452" fill="none" stroke="#00f5ff" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- Inner border -->
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="url(#controllerGrad)" stroke-width="1.5" opacity="0.25"/>
+
+  <!-- Game controller -->
+  <g transform="translate(256, 210)" filter="url(#glowCyan)">
+    <path d="M-80,-30 C-80,-55 -55,-55 -40,-55 L40,-55 C55,-55 80,-55 80,-30 L80,10 C80,25 95,55 75,55 C55,55 45,30 30,30 L-30,30 C-45,30 -55,55 -75,55 C-95,55 -80,25 -80,10 Z" 
+          fill="none" stroke="#00f5ff" stroke-width="3.5"/>
+    <rect x="-55" y="-22" width="6" height="24" rx="2" fill="#00f5ff" opacity="0.9"/>
+    <rect x="-64" y="-13" width="24" height="6" rx="2" fill="#00f5ff" opacity="0.9"/>
+    <circle cx="45" cy="-20" r="6" fill="none" stroke="#bf00ff" stroke-width="2.5" opacity="0.9"/>
+    <circle cx="58" cy="-8" r="6" fill="none" stroke="#00f5ff" stroke-width="2.5" opacity="0.9"/>
+    <circle cx="32" cy="-8" r="6" fill="none" stroke="#39ff14" stroke-width="2.5" opacity="0.9"/>
+    <circle cx="45" cy="4" r="6" fill="none" stroke="#ff6b35" stroke-width="2.5" opacity="0.9"/>
+    <circle cx="0" cy="-12" r="4" fill="#00f5ff" opacity="0.6"/>
+  </g>
+
+  <!-- GAME text -->
+  <text x="256" y="320" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="12" fill="#00f5ff" filter="url(#glowCyan)">GAME</text>
+
+  <!-- HUB text -->
+  <text x="256" y="390" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="16" fill="#bf00ff" filter="url(#glowPurple)">HUB</text>
+
+  <!-- Bottom accent -->
+  <line x1="160" y1="420" x2="352" y2="420" stroke="url(#controllerGrad)" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- Scan lines -->
+  <rect x="24" y="200" width="464" height="1" fill="#00f5ff" opacity="0.06"/>
+  <rect x="24" y="300" width="464" height="1" fill="#bf00ff" opacity="0.04"/>
 </svg>

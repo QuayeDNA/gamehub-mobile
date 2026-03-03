@@ -1,7 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="32" fill="#0a0a0f"/>
-  <rect x="8" y="8" width="176" height="176" rx="28" fill="none" stroke="#00f5ff" stroke-width="2" opacity="0.3"/>
-  <text x="96" y="80" text-anchor="middle" font-family="monospace" font-size="20" font-weight="900" fill="#00f5ff">GAME</text>
-  <text x="96" y="110" text-anchor="middle" font-family="monospace" font-size="20" font-weight="900" fill="#bf00ff">HUB</text>
-  <text x="96" y="145" text-anchor="middle" font-size="40">🎮</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0f"/>
+      <stop offset="100%" stop-color="#12121a"/>
+    </linearGradient>
+    <filter id="glowCyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+      <feFlood flood-color="#00f5ff" flood-opacity="0.6"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowPurple" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feFlood flood-color="#bf00ff" flood-opacity="0.5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="controllerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#bf00ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="192" height="192" rx="40" fill="url(#bg)"/>
+
+  <!-- Corner accents -->
+  <path d="M 22 8 L 8 8 L 8 22" fill="none" stroke="#00f5ff" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 170 8 L 184 8 L 184 22" fill="none" stroke="#bf00ff" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 22 184 L 8 184 L 8 170" fill="none" stroke="#bf00ff" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+  <path d="M 170 184 L 184 184 L 184 170" fill="none" stroke="#00f5ff" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- Inner border -->
+  <rect x="10" y="10" width="172" height="172" rx="34" fill="none" stroke="url(#controllerGrad)" stroke-width="1" opacity="0.2"/>
+
+  <!-- Controller -->
+  <g transform="translate(96, 76)" filter="url(#glowCyan)">
+    <path d="M-30,-11 C-30,-21 -21,-21 -15,-21 L15,-21 C21,-21 30,-21 30,-11 L30,4 C30,10 36,21 28,21 C21,21 17,11 11,11 L-11,11 C-17,11 -21,21 -28,21 C-36,21 -30,10 -30,4 Z" 
+          fill="none" stroke="#00f5ff" stroke-width="2"/>
+    <rect x="-21" y="-8" width="2.5" height="9" rx="1" fill="#00f5ff" opacity="0.9"/>
+    <rect x="-24" y="-5" width="9" height="2.5" rx="1" fill="#00f5ff" opacity="0.9"/>
+    <circle cx="17" cy="-7" r="2.5" fill="none" stroke="#bf00ff" stroke-width="1.5" opacity="0.9"/>
+    <circle cx="22" cy="-2" r="2.5" fill="none" stroke="#00f5ff" stroke-width="1.5" opacity="0.9"/>
+    <circle cx="12" cy="-2" r="2.5" fill="none" stroke="#39ff14" stroke-width="1.5" opacity="0.9"/>
+    <circle cx="17" cy="3" r="2.5" fill="none" stroke="#ff6b35" stroke-width="1.5" opacity="0.9"/>
+  </g>
+
+  <!-- GAME text -->
+  <text x="96" y="122" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="27" font-weight="900" letter-spacing="4" fill="#00f5ff" filter="url(#glowCyan)">GAME</text>
+
+  <!-- HUB text -->
+  <text x="96" y="148" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="27" font-weight="900" letter-spacing="6" fill="#bf00ff" filter="url(#glowPurple)">HUB</text>
+
+  <!-- Bottom accent -->
+  <line x1="60" y1="158" x2="132" y2="158" stroke="url(#controllerGrad)" stroke-width="1.5" opacity="0.35" stroke-linecap="round"/>
 </svg>

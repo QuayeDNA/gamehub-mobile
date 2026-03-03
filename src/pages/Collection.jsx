@@ -7,6 +7,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { PageLayout, Header, EmptyState } from '../components/Layout';
 import { GameCard } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import SEO from '../components/SEO';
 
 export default function Collection() {
   const { id } = useParams();
@@ -54,6 +55,12 @@ export default function Collection() {
         />
       }
     >
+      <SEO
+        title={col.name}
+        description={`${col.emoji} ${col.name} — a custom collection of ${col.games.length} game${col.games.length !== 1 ? 's' : ''} on GameHub.`}
+        path={`/collection/${id}`}
+        noindex={true}
+      />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

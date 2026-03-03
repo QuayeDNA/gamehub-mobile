@@ -7,6 +7,7 @@ import { CATEGORIES, SOURCES } from '../services/gameApi';
 import { PageLayout, Header, CategoryPills, SkeletonGrid, EmptyState } from '../components/Layout';
 import { GameCard } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import SEO from '../components/SEO';
 
 export default function Search() {
   useDocumentTitle('Search');
@@ -31,6 +32,12 @@ export default function Search() {
 
   return (
     <PageLayout header={<Header showBack title="Search" showSearch={false} />}>
+      <SEO
+        title="Search Games"
+        description="Search thousands of free HTML5 games by name, genre, or tag. Find your next favorite game instantly."
+        path="/search"
+        noindex={true}
+      />
       {/* Search Input */}
       <div className="px-4 pt-4 pb-2">
         <div className="relative">

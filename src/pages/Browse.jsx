@@ -8,6 +8,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { PageLayout, Header, SectionHeader, SkeletonGrid, SortBar } from '../components/Layout';
 import { GameCard } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import SEO from '../components/SEO';
 
 function sortGames(games, sort) {
   if (sort === 'default') return games;
@@ -24,6 +25,11 @@ export default function Browse() {
 
   return (
     <PageLayout header={<Header showBack title="Browse Games" />}>
+      <SEO
+        title="Browse Games"
+        description="Browse all free HTML5 games by category. Action, puzzle, racing, sports, strategy & more — play instantly."
+        path="/browse"
+      />
       {/* Category Grid */}
       <SectionHeader title="Categories" icon="🗂️" />
       <div className="grid grid-cols-3 gap-2 px-4 pb-4">

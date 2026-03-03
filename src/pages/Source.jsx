@@ -8,6 +8,7 @@ import { getSourceMeta, SOURCES } from '../services/gameApi';
 import { PageLayout, Header, SkeletonGrid, EmptyState, ErrorBanner, SortBar } from '../components/Layout';
 import { GameCard } from '../components/GameCards';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import SEO, { buildBreadcrumbJsonLd } from '../components/SEO';
 
 /* Source‑specific accent colours for the hero section */
 const SOURCE_COLORS = {
@@ -36,6 +37,15 @@ export default function Source() {
     <PageLayout
       header={<Header showBack title={`${srcInfo.icon} ${srcInfo.label}`} />}
     >
+      <SEO
+        title={`${srcInfo.label} Games`}
+        description={`Play free HTML5 games from ${srcInfo.label}. Browse the full ${srcInfo.label} catalogue on GameHub.`}
+        path={`/source/${slug}`}
+        jsonLd={buildBreadcrumbJsonLd([
+          { name: 'Home', url: '/' },
+          { name: srcInfo.label, url: `/source/${slug}` },
+        ])}
+      />
       {/* Source Hero */}
       <motion.div
         initial={{ opacity: 0 }}

@@ -13,6 +13,7 @@ import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useToast } from '../components/Toast';
 import { useRatings } from '../hooks/useRatings';
 import { useCollections } from '../hooks/useCollections';
+import SEO, { buildGameJsonLd } from '../components/SEO';
 
 export default function GameDetail() {
   const { id } = useParams();
@@ -91,6 +92,14 @@ export default function GameDetail() {
 
   return (
     <>
+      <SEO
+        title={game.title}
+        description={game.description || `Play ${game.title} for free — no download required. ${game.category} game on GameHub.`}
+        path={`/game/${encodeURIComponent(game.id)}`}
+        image={game.thumbnail}
+        type="game"
+        jsonLd={buildGameJsonLd(game)}
+      />
       <div className="min-h-screen bg-dark-900 max-w-lg mx-auto">
         {/* Hero Image */}
         <div className="relative h-64 overflow-hidden">
