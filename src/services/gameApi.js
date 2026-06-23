@@ -11,7 +11,10 @@ import {
   setDetailCache as setDetCache,
   getAllCachedGames,
 } from "./gameCache.js";
-import { getEnabledSourceKeys } from "../hooks/useSourcePrefs.js";
+import {
+  getEnabledSourceKeys,
+  getMobileFilter,
+} from "../hooks/useSourcePrefs.js";
 
 // ═══════════════════════════════════════════════════════════════════════
 //  CACHE
@@ -334,6 +337,9 @@ async function rawGM(category, page, amount) {
     amount: String(amount),
   });
   if (category) params.set("category", category);
+  // Mobile filter: restrict to mobile-verified games when user preference is on.
+  // GameMonetize supports ?type=mobile in their rssfeed endpoint.
+  if (getMobileFilter()) params.set("type", "mobile");
   const res = await fetch(`${GM_BASE}/rssfeed.php?${params}`, {
     signal: AbortSignal.timeout(TIMEOUT),
   });
@@ -344,7 +350,10 @@ async function rawGM(category, page, amount) {
 
 async function rawGD(category, page, amount) {
   const cat = category || "All";
-  const url = `https://catalog.api.gamedistribution.com/api/v2.0/rss/All/?collection=all&categories=${encodeURIComponent(cat)}&subType=all&type=all&mobile=all&rewarded=all&amount=${amount}&page=${page}`;
+  // Mobile filter: GameDistribution supports mobile=true to return only
+  // games that have been verified to work on mobile screens.
+  const mobileParam = getMobileFilter() ? "true" : "all";
+  const url = `https://catalog.api.gamedistribution.com/api/v2.0/rss/All/?collection=all&categories=${encodeURIComponent(cat)}&subType=all&type=all&mobile=${mobileParam}&rewarded=all&amount=${amount}&page=${page}`;
   const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT) });
   if (!res.ok) throw new Error(`GD ${res.status}`);
   const json = await res.json();

@@ -20,6 +20,7 @@ import {
   ShieldOff,
   ToggleLeft,
   ToggleRight,
+  Smartphone,
 } from "lucide-react";
 import { usePlayerStats } from "../hooks/usePlayerStats";
 import { useFavorites } from "../hooks/useFavorites";
@@ -197,7 +198,7 @@ export default function Profile() {
   useDocumentTitle("Profile");
   const { theme, toggleTheme } = useTheme();
   const toast = useToast();
-  const { prefs, toggleSource, setAdShield, isSourceEnabled } =
+  const { prefs, toggleSource, setAdShield, setMobileFilter, isSourceEnabled } =
     useSourcePrefs();
   const {
     stats,
@@ -562,8 +563,29 @@ export default function Profile() {
       <div className="px-4 pb-2 space-y-2">
         <p className="text-[11px] text-dim px-1 -mt-1 mb-2">
           Disable ad-heavy sources to improve your experience. Games from
-          disabled sources won’t appear.
+          disabled sources won't appear.
         </p>
+
+        {/* Mobile Games Only toggle */}
+        <button
+          onClick={() => setMobileFilter(!prefs.mobileFilter)}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all
+            bg-dark-700/50 border-dark-500/20 text-white/80 hover:border-neon-cyan/30"
+        >
+          <Smartphone size={18} className="text-neon-cyan flex-shrink-0" />
+          <div className="flex-1 text-left">
+            <p className="text-sm font-semibold">Mobile Games Only</p>
+            <p className="text-[10px] text-dim mt-0.5 font-normal">
+              Filters GameMonetize &amp; GameDistribution to mobile-verified
+              games.
+            </p>
+          </div>
+          {prefs.mobileFilter ? (
+            <ToggleRight size={22} className="text-neon-green flex-shrink-0" />
+          ) : (
+            <ToggleLeft size={22} className="text-dim flex-shrink-0" />
+          )}
+        </button>
         {SOURCES.filter((s) => s.key).map((src) => {
           const enabled = isSourceEnabled(src.slug);
           return (
@@ -584,6 +606,11 @@ export default function Profile() {
               {src.slug === "gamemonetize" && (
                 <span className="text-[9px] px-1.5 py-0.5 rounded bg-neon-orange/15 text-neon-orange font-bold uppercase tracking-wider">
                   Heavy Ads
+                </span>
+              )}
+              {src.slug === "gamepix" && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-dark-500/50 text-white/40 font-bold uppercase tracking-wider">
+                  Needs SID
                 </span>
               )}
               {enabled ? (
