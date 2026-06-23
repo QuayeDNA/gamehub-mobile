@@ -120,6 +120,12 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/hg/, ""),
         secure: false,
       },
+      "/api/hg-proxy": {
+        target: "https://www.htmlgames.com",
+        changeOrigin: true,
+        rewrite: () => "/rss/games.php",
+        secure: false,
+      },
     },
   },
 });

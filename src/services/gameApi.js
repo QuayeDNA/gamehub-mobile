@@ -317,16 +317,16 @@ function firstStr(val) {
 
 const TIMEOUT = 12000;
 
-// ── Proxy base URLs ────────────────────────────────────────────────────────
+// ── Proxy paths ─────────────────────────────────────────────────────────────
 // Both dev and prod use the same /api/* paths — no environment variables
 // or build-time branching needed:
 //
 //   Dev:  vite.config.js server.proxy forwards /api/gm → gamemonetize.com
 //         and /api/hg → htmlgames.com  (see vite.config.js)
 //
-//   Prod: Vercel Edge Functions at api/gm/[...path].js and
-//         api/hg/[...path].js handle the same paths server-side,
-//         bypassing CORS entirely (same-origin requests).
+//   Prod: Vercel Edge Function at api/gm/[...path].js handles GM server-side.
+//         HG uses api/hg-proxy.js — a flat edge function at a path that
+//         avoids Vercel's WAF block on the /api/hg/ directory pattern.
 //
 const GM_BASE = "/api/gm";
 
@@ -411,8 +411,7 @@ async function rawHG(category, page, amount) {
   // Fetch full list once, then cache in memory
   if (!_hgCache || Date.now() - _hgCacheTime > HG_CACHE_TTL) {
     try {
-      const hgBase = "/api/hg";
-      const res = await fetch(`${hgBase}/rss/games.php?type=json`, {
+      const res = await fetch("/api/hg-proxy?type=json", {
         signal: AbortSignal.timeout(TIMEOUT),
       });
       if (!res.ok) throw new Error(`HG ${res.status}`);
