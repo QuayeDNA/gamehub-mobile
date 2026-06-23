@@ -168,13 +168,6 @@ export function useInfiniteGames({ category = 'all', perPage = 30, source = null
         return true;
       });
 
-      if (unique.length === 0) {
-        setHasMore(false);
-        loadingRef.current = false;
-        setLoadingMore(false);
-        return;
-      }
-
       setGames(prev => {
         const merged = [...prev, ...unique];
         saveToCache(merged, next, seenRef.current, !done);
@@ -234,18 +227,31 @@ export function useInfiniteGames({ category = 'all', perPage = 30, source = null
 
 export function useIntersectionLoader(loadMore, hasMore, loading) {
   const sentinelRef = useRef(null);
+  const throttleRef = useRef(false);
 
   useEffect(() => {
     if (!hasMore || loading) return;
     const el = sentinelRef.current;
     if (!el) return;
 
+    let timer;
+
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) loadMore(); },
+      ([entry]) => {
+        if (entry.isIntersecting && !throttleRef.current) {
+          throttleRef.current = true;
+          loadMore();
+          timer = setTimeout(() => { throttleRef.current = false; }, 300);
+        }
+      },
       { rootMargin: '400px' }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      throttleRef.current = false;
+    };
   }, [loadMore, hasMore, loading]);
 
   return sentinelRef;

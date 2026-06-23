@@ -350,10 +350,9 @@ async function rawGM(category, page, amount) {
 
 async function rawGD(category, page, amount) {
   const cat = category || "All";
-  // Mobile filter: GameDistribution supports mobile=true to return only
-  // games that have been verified to work on mobile screens.
-  const mobileParam = getMobileFilter() ? "true" : "all";
-  const url = `https://catalog.api.gamedistribution.com/api/v2.0/rss/All/?collection=all&categories=${encodeURIComponent(cat)}&subType=all&type=all&mobile=${mobileParam}&rewarded=all&amount=${amount}&page=${page}`;
+  // GD's mobile=true filter crashes their server (returns 500).
+  // Always use mobile=all until they fix their endpoint.
+  const url = `https://catalog.api.gamedistribution.com/api/v2.0/rss/All/?collection=all&categories=${encodeURIComponent(cat)}&subType=all&type=all&mobile=all&rewarded=all&amount=${amount}&page=${page}`;
   const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT) });
   if (!res.ok) throw new Error(`GD ${res.status}`);
   const json = await res.json();
