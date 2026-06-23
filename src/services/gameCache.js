@@ -147,7 +147,32 @@ export function getAllCachedGames() {
     if (entry.game?.id) byId.set(entry.game.id, entry.game);
   }
 
+  // HG cache mirror (200 games from htmlgames.com, refreshed every 30 min)
+  for (const g of _hgGames) {
+    if (g?.id) byId.set(g.id, g);
+  }
+
   return Array.from(byId.values());
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  GLOBAL CLEAR
+// ═══════════════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════
+//  HG CACHE MIRROR  (from gameApi.js _hgCache — set via callback)
+// ═══════════════════════════════════════════════════════════════════════
+
+/** @type {any[]} */
+let _hgGames = [];
+
+/**
+ * Called by gameApi.js whenever _hgCache is populated/refreshed.
+ * Keeps a local slice so getAllCachedGames() can see HG games
+ * without a circular import.
+ */
+export function setHGCacheGames(games) {
+  _hgGames = games;
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -159,4 +184,5 @@ export function clearSessionCache() {
   _detailCache.clear();
   _searchCache.clear();
   _singleCache.clear();
+  _hgGames = [];
 }

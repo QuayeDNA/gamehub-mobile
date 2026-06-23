@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader2, Shuffle, Download } from "lucide-react";
@@ -42,6 +42,21 @@ export default function Home() {
 
   const sentinelRef = useIntersectionLoader(loadMore, hasMore, loadingMore);
 
+  // Lock featured/trending slices from the first batch so the carousel
+  // and featured row never shift when loadMore appends new games.
+  const [lockedFeatured, setLockedFeatured] = useState(null);
+  const [lockedTrending, setLockedTrending] = useState(null);
+  useEffect(() => {
+    if (games.length >= 18) {
+      setLockedFeatured((prev) => prev || games.slice(0, 10));
+      setLockedTrending((prev) => prev || games.slice(10, 18));
+    }
+  }, [games]);
+
+  const featured = lockedFeatured || games.slice(0, 10);
+  const trending = lockedTrending || games.slice(10, 18);
+  const moreGames = games.slice(18);
+
   const [surpriseLoading, setSurpriseLoading] = useState(false);
 
   const handleSurpriseMe = async () => {
@@ -61,10 +76,6 @@ export default function Home() {
     const pick = pool[Math.floor(Math.random() * pool.length)];
     navigate(`/game/${encodeURIComponent(pick.id)}`, { state: { game: pick } });
   };
-
-  const featured = games.slice(0, 10); // 10 games for carousel hero
-  const trending = games.slice(10, 18);
-  const moreGames = games.slice(18);
 
   return (
     <PageLayout header={<Header />}>

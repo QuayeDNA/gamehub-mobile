@@ -45,6 +45,7 @@ export function GameCard({ game, index = 0, badge, onFavorite, isFavorite }) {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.05, 0.4), duration: 0.3 }}
+      style={{ contentVisibility: 'auto' }}
     >
       <Link
         to={`/game/${encodeURIComponent(game.id)}`}

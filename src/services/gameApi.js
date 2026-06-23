@@ -10,6 +10,7 @@ import {
   getDetailCache,
   setDetailCache as setDetCache,
   getAllCachedGames,
+  setHGCacheGames,
 } from "./gameCache.js";
 import {
   getEnabledSourceKeys,
@@ -58,6 +59,9 @@ export function clearAllCaches() {
       toRemove.push(k);
   }
   toRemove.forEach((k) => localStorage.removeItem(k));
+  _hgCache = null;
+  _hgCacheTime = 0;
+  setHGCacheGames([]);
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -420,6 +424,7 @@ async function rawHG(category, page, amount) {
       const json = await res.json();
       _hgCache = (Array.isArray(json) ? json : []).slice(0, HG_MAX);
       _hgCacheTime = Date.now();
+      setHGCacheGames(_hgCache);
     } catch {
       return [];
     }
@@ -659,8 +664,8 @@ export async function fetchGamesBatch({
     if (!c[`${src}Done`]) {
       jobs.push(
         fetchSourcePage(src, category, c[src], amount)
-          .then((g) => ({ src, g }))
-          .catch(() => ({ src, g: [] })),
+          .then((g) => ({ src, g, error: false }))
+          .catch(() => ({ src, g: [], error: true })),
       );
     }
   }
@@ -670,9 +675,15 @@ export async function fetchGamesBatch({
   const results = await Promise.all(jobs);
 
   const next = { ...c };
-  for (const { src, g } of results) {
-    // Only mark a source as exhausted when it returns zero results.
-    // Returning fewer than `amount` is normal for some APIs and doesn't mean done.
+  for (const { src, g, error } of results) {
+    // Network error → skip this batch, retry same page next loadMore.
+    // Don't advance cursor, don't mark Done — transient blips won't
+    // permanently disable a source.
+    if (error) continue;
+
+    // Source confirmed exhausted (server returned 0 results).
+    // Returning fewer than `amount` on success is normal for some APIs
+    // and doesn't count as exhaustion — only a clean empty response does.
     if (g.length === 0) next[`${src}Done`] = true;
     else next[src] = c[src] + 1;
   }
@@ -719,10 +730,6 @@ export async function fetchGames({
   page = 1,
   limit = 40,
 } = {}) {
-  const cacheKey = `f_${category}_${page}_${limit}`;
-  const cached = getCached(cacheKey);
-  if (cached) return cached;
-
   const cursors = {
     gm: page,
     gd: page,
@@ -736,7 +743,6 @@ export async function fetchGames({
   const { games } = await fetchGamesBatch({ category, cursors, amount: limit });
   const result = dedup(games);
 
-  if (result.length) setCache(cacheKey, result);
   if (result.length === 0)
     throw new Error("All game sources unavailable. Check your connection.");
   return result;

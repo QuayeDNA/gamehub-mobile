@@ -52,15 +52,17 @@ export default async function handler(request) {
     );
   }
 
-  const body        = await upstream.arrayBuffer();
-  const contentType = upstream.headers.get('Content-Type') ?? 'application/json; charset=utf-8';
+  // Parse upstream, cap to 200 games to avoid sending 1200+ items to the client
+  const raw  = await upstream.json();
+  const data = (Array.isArray(raw) ? raw : []).slice(0, 200);
 
-  return new Response(body, {
+  return new Response(JSON.stringify(data), {
     status: 200,
     headers: {
-      'Content-Type':                contentType,
+      'Content-Type':                'application/json; charset=utf-8',
       'Cache-Control':               'public, max-age=300, s-maxage=1800',
       'X-Proxied-From':              UPSTREAM,
+      'X-Capped-Count':              String(data.length),
       'Access-Control-Allow-Origin': '*',
     },
   });
