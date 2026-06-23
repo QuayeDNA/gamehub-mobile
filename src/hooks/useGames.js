@@ -66,7 +66,7 @@ export function useInfiniteGames({ category = 'all', perPage = 30, source = null
   const [loading, setLoading] = useState(!cached);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
-  const [hasMore, setHasMore] = useState(cached ? cached.hasMore : true);
+  const [hasMore, setHasMore] = useState(true);
 
   const cursorsRef = useRef(cached?.cursors || null);
   const seenRef = useRef(cached?.seen ? new Set(cached.seen) : new Set());
@@ -92,7 +92,7 @@ export function useInfiniteGames({ category = 'all', perPage = 30, source = null
       setGames(hit.games);
       cursorsRef.current = hit.cursors;
       seenRef.current = new Set(hit.seen);
-      setHasMore(hit.hasMore);
+      setHasMore(true);
       setLoading(false);
       setError(null);
       loadingRef.current = false;
