@@ -52,7 +52,7 @@ export function GameCard({ game, index = 0, badge, onFavorite, isFavorite }) {
         className="group block rounded-2xl overflow-hidden bg-dark-700 border border-dark-500/30
                    hover:border-neon-cyan/20 transition-all duration-300 active:scale-[0.97]"
       >
-        <div className="relative aspect-[16/10] overflow-hidden bg-dark-800">
+        <div className="relative aspect-16/10 overflow-hidden bg-dark-800">
           <GameImage
             src={game.thumbnail}
             alt={game.title}
@@ -154,7 +154,7 @@ export function HorizontalCard({ game, index = 0 }) {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: Math.min(index * 0.06, 0.48), duration: 0.3 }}
-      className="flex-shrink-0 w-44"
+      className="shrink-0 w-44"
     >
       <Link
         to={`/game/${encodeURIComponent(game.id)}`}
@@ -162,7 +162,7 @@ export function HorizontalCard({ game, index = 0 }) {
         className="group block"
       >
         <div
-          className="relative aspect-[16/10] rounded-xl overflow-hidden bg-dark-700 border border-dark-500/20
+          className="relative aspect-16/10 rounded-xl overflow-hidden bg-dark-700 border border-dark-500/20
                         group-hover:border-neon-cyan/20 transition-all duration-300 active:scale-[0.97]"
         >
           <GameImage
@@ -310,7 +310,7 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
       <div className="absolute top-0 inset-x-0 h-20 bg-linear-to-b from-dark-900/50 to-transparent" />
 
       {/* Neon accent line at top */}
-      <div className="absolute top-0 inset-x-0 h-[2px] bg-linear-to-r from-transparent via-neon-cyan/40 to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-0.5 bg-linear-to-r from-transparent via-neon-cyan/40 to-transparent" />
 
       {/* Content card — glassmorphism */}
       <Link
@@ -333,7 +333,7 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
         >
           <div className="flex items-center gap-3 p-3">
             {/* Mini thumbnail */}
-            <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
+            <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/10">
               <GameImage
                 src={game.thumbnail}
                 alt={game.title}
@@ -363,7 +363,7 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
 
             {/* Play button */}
             <div
-              className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
+              className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(0,245,255,0.25), rgba(191,0,255,0.25))",
@@ -441,7 +441,7 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
         </div>
 
         {/* Progress bar */}
-        <div className="flex-1 h-[2px] bg-white/10 rounded-full overflow-hidden">
+        <div className="flex-1 h-0.5 bg-white/10 rounded-full overflow-hidden">
           <motion.div
             className="h-full rounded-full"
             style={{
@@ -474,7 +474,7 @@ export function FeaturedCard({ game, index = 0 }) {
       >
         <div className="flex items-center gap-3 p-3">
           {/* Thumbnail */}
-          <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-dark-800">
+          <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-dark-800">
             <GameImage
               src={game.thumbnail}
               alt={game.title}
@@ -504,7 +504,7 @@ export function FeaturedCard({ game, index = 0 }) {
 
           {/* Play button */}
           <div
-            className="flex-shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-neon-cyan/20 to-neon-purple/20
+            className="shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-neon-cyan/20 to-neon-purple/20
                                       border border-neon-cyan/20 flex items-center justify-center
                                       group-hover:from-neon-cyan/30 group-hover:to-neon-purple/30 transition-all"
           >

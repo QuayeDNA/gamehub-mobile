@@ -144,7 +144,7 @@ function AvatarPicker({ currentAvatar, onSelect, onClose }) {
             <button
               key={style.id}
               onClick={() => setSelectedStyle(style.id)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide transition-all
+              className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide transition-all
                 ${
                   selectedStyle === style.id
                     ? "bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40"
@@ -309,7 +309,7 @@ export default function Profile() {
                     />
                     <button
                       onClick={handleSaveName}
-                      className="flex-shrink-0 px-3 py-1.5 bg-neon-cyan text-dark-900 rounded-lg text-xs font-bold whitespace-nowrap"
+                      className="shrink-0 px-3 py-1.5 bg-neon-cyan text-dark-900 rounded-lg text-xs font-bold whitespace-nowrap"
                     >
                       Save
                     </button>
@@ -572,7 +572,7 @@ export default function Profile() {
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all
             bg-dark-700/50 border-dark-500/20 text-white/80 hover:border-neon-cyan/30"
         >
-          <Smartphone size={18} className="text-neon-cyan flex-shrink-0" />
+          <Smartphone size={18} className="text-neon-cyan shrink-0" />
           <div className="flex-1 text-left">
             <p className="text-sm font-semibold">Mobile Games Only</p>
             <p className="text-[10px] text-dim mt-0.5 font-normal">
@@ -581,9 +581,9 @@ export default function Profile() {
             </p>
           </div>
           {prefs.mobileFilter ? (
-            <ToggleRight size={22} className="text-neon-green flex-shrink-0" />
+            <ToggleRight size={22} className="text-neon-green shrink-0" />
           ) : (
-            <ToggleLeft size={22} className="text-dim flex-shrink-0" />
+            <ToggleLeft size={22} className="text-dim shrink-0" />
           )}
         </button>
         {SOURCES.filter((s) => s.key).map((src) => {
@@ -783,7 +783,7 @@ function StatCard({ icon, label, value, truncate, color = "cyan" }) {
 function Badge({ emoji, label, unlocked }) {
   return (
     <div
-      className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all
+      className={`shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all
       ${
         unlocked
           ? "bg-neon-cyan/5 border-neon-cyan/20"

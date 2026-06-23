@@ -475,7 +475,7 @@ export default function GameDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[150] flex items-end justify-center bg-dark-950/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-150 flex items-end justify-center bg-dark-950/80 backdrop-blur-sm p-4"
             onClick={() => setShowDesktopWarning(false)}
           >
             <motion.div
@@ -487,7 +487,7 @@ export default function GameDetail() {
               className="w-full max-w-lg bg-dark-800 rounded-3xl border border-neon-orange/20 p-6"
             >
               <div className="flex items-start gap-3 mb-4">
-                <span className="text-3xl flex-shrink-0">🖥️</span>
+                <span className="text-3xl shrink-0">🖥️</span>
                 <div>
                   <h3 className="font-display text-sm font-black text-white tracking-wider mb-1">
                     DESKTOP GAME
@@ -539,7 +539,7 @@ export default function GameDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm flex items-end justify-center"
+            className="fixed inset-0 z-90 bg-black/60 backdrop-blur-sm flex items-end justify-center"
             onClick={() => setShowColPicker(false)}
           >
             <motion.div

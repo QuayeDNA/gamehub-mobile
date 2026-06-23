@@ -100,7 +100,7 @@ export function BottomNav() {
             <Link
               key={key}
               to={to}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200 active:scale-90 min-w-[60px]
+              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200 active:scale-90 min-w-15
                 ${isActive ? "text-neon-cyan" : "text-dim hover:text-white/70"}`}
               aria-label={label}
               aria-current={isActive ? "page" : undefined}
@@ -316,7 +316,7 @@ export function EmptyState({ icon = "🕹️", title, message, action }) {
 export function SkeletonCard() {
   return (
     <div className="rounded-2xl overflow-hidden bg-dark-700 border border-dark-500/30">
-      <div className="skeleton-shimmer aspect-[16/10]" />
+      <div className="skeleton-shimmer aspect-16/10" />
       <div className="p-3 space-y-2">
         <div className="skeleton-shimmer h-4 w-3/4 rounded-md" />
         <div className="skeleton-shimmer h-3 w-1/2 rounded-md" />
@@ -339,8 +339,8 @@ export function SkeletonRow({ count = 4 }) {
   return (
     <div className="flex gap-3 px-4 overflow-hidden">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex-shrink-0 w-40">
-          <div className="skeleton-shimmer aspect-[16/10] rounded-xl" />
+        <div key={i} className="shrink-0 w-40">
+          <div className="skeleton-shimmer aspect-16/10 rounded-xl" />
           <div className="skeleton-shimmer h-3 w-24 rounded-md mt-2" />
         </div>
       ))}

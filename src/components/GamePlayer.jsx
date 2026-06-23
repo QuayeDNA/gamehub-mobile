@@ -269,7 +269,7 @@ export default function GamePlayer({ game, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] bg-dark-900 flex flex-col items-center justify-center p-8"
+          className="fixed inset-0 z-200 bg-dark-900 flex flex-col items-center justify-center p-8"
         >
           <AlertTriangle size={48} className="text-neon-orange mb-4" />
           <h2 className="font-display text-lg font-bold text-white mb-2">
@@ -294,13 +294,13 @@ export default function GamePlayer({ game, onClose }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] bg-dark-950 flex flex-col"
+        className="fixed inset-0 z-200 bg-dark-950 flex flex-col"
       >
         {/* ── Top control bar ──────────────────────────────────────────── */}
         <motion.div
           initial={{ y: -40 }}
           animate={{ y: 0 }}
-          className="flex items-center justify-between px-3 py-2 bg-dark-900/95 backdrop-blur-lg border-b border-neon-cyan/10 z-10 flex-shrink-0"
+          className="flex items-center justify-between px-3 py-2 bg-dark-900/95 backdrop-blur-lg border-b border-neon-cyan/10 z-10 shrink-0"
         >
           <button
             onClick={handleClose}

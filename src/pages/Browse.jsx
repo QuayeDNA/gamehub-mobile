@@ -81,7 +81,7 @@ export default function Browse() {
               className="flex items-center gap-2 py-4 px-3 rounded-2xl bg-dark-700/50 border border-dark-500/20
                          hover:border-neon-cyan/20 hover:bg-dark-600/50 transition-all active:scale-95 min-w-0 overflow-hidden"
             >
-              <span className="text-2xl flex-shrink-0">{src.icon}</span>
+              <span className="text-2xl shrink-0">{src.icon}</span>
               <span className="text-[10px] font-display font-bold text-white/70 tracking-wider uppercase truncate">
                 {src.label}
               </span>

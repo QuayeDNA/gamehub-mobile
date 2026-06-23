@@ -86,7 +86,7 @@ export default function Search() {
       <div className="flex gap-2 px-4 pb-2 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setSrcFilter("all")}
-          className={`flex-shrink-0 text-[10px] font-display font-bold tracking-wider px-3 py-1.5 rounded-lg transition-all
+          className={`shrink-0 text-[10px] font-display font-bold tracking-wider px-3 py-1.5 rounded-lg transition-all
             ${
               srcFilter === "all"
                 ? "bg-neon-purple/15 text-neon-purple border border-neon-purple/30"
@@ -99,7 +99,7 @@ export default function Search() {
           <button
             key={s.slug}
             onClick={() => setSrcFilter(s.slug)}
-            className={`flex-shrink-0 text-[10px] font-display font-bold tracking-wider px-3 py-1.5 rounded-lg transition-all
+            className={`shrink-0 text-[10px] font-display font-bold tracking-wider px-3 py-1.5 rounded-lg transition-all
               ${
                 srcFilter === s.slug
                   ? "bg-neon-purple/15 text-neon-purple border border-neon-purple/30"
