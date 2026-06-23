@@ -117,7 +117,7 @@ export default defineConfig({
       "/api/hg-proxy": {
         target: "https://www.htmlgames.com",
         changeOrigin: true,
-        rewrite: () => "/rss/games.php",
+        rewrite: () => "/rss/games.php?type=json",
         secure: false,
       },
     },

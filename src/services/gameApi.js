@@ -407,16 +407,18 @@ let _hgCache = null;
 let _hgCacheTime = 0;
 const HG_CACHE_TTL = 30 * 60 * 1000; // 30 min
 
+const HG_MAX = 200; // cap to prevent 1000+ DOM nodes
+
 async function rawHG(category, page, amount) {
   // Fetch full list once, then cache in memory
   if (!_hgCache || Date.now() - _hgCacheTime > HG_CACHE_TTL) {
     try {
-      const res = await fetch("/api/hg-proxy?type=json", {
+      const res = await fetch("/api/hg-proxy", {
         signal: AbortSignal.timeout(TIMEOUT),
       });
       if (!res.ok) throw new Error(`HG ${res.status}`);
       const json = await res.json();
-      _hgCache = Array.isArray(json) ? json : [];
+      _hgCache = (Array.isArray(json) ? json : []).slice(0, HG_MAX);
       _hgCacheTime = Date.now();
     } catch {
       return [];

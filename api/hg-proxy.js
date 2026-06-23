@@ -30,7 +30,7 @@ export default async function handler(request) {
 
   const url       = new URL(request.url);
   const search    = url.search;
-  const targetUrl = `${UPSTREAM}/rss/games.php${search}`;
+  const targetUrl = `${UPSTREAM}/rss/games.php?type=json`;
 
   let upstream;
   try {
