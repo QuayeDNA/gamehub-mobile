@@ -1,26 +1,38 @@
-import React, { useState, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
-import { useInfiniteGames, useIntersectionLoader } from '../hooks/useGames';
-import { useFavorites } from '../hooks/useFavorites';
-import { getCategoryMeta } from '../services/gameApi';
-import { PageLayout, Header, SkeletonGrid, EmptyState, ErrorBanner, SortBar } from '../components/Layout';
-import { GameCard } from '../components/GameCards';
-import useDocumentTitle from '../hooks/useDocumentTitle';
-import SEO, { buildBreadcrumbJsonLd } from '../components/SEO';
+import React, { useState, useMemo } from "react";
+import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
+import { useInfiniteGames, useIntersectionLoader } from "../hooks/useGames";
+import { useFavorites } from "../hooks/useFavorites";
+import { getCategoryMeta } from "../services/gameApi";
+import {
+  PageLayout,
+  Header,
+  SkeletonGrid,
+  EmptyState,
+  ErrorBanner,
+  SortBar,
+} from "../components/Layout";
+import { GameCard } from "../components/GameCards";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import SEO, { buildBreadcrumbJsonLd } from "../components/SEO";
 
 export default function Category() {
   const { slug } = useParams();
   const catInfo = getCategoryMeta(slug);
   useDocumentTitle(catInfo.label);
-  const { games, loading, loadingMore, error, hasMore, loadMore, refetch } = useInfiniteGames({ category: slug });
+  const { games, loading, loadingMore, error, hasMore, loadMore, refetch } =
+    useInfiniteGames({ category: slug });
   const { toggleFavorite, isFavorite } = useFavorites();
   const sentinelRef = useIntersectionLoader(loadMore, hasMore, loadingMore);
-  const [sort, setSort] = useState('default');
+  const [sort, setSort] = useState("default");
   const sorted = useMemo(() => {
-    if (sort === 'default') return games;
-    return [...games].sort((a, b) => sort === 'a-z' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
+    if (sort === "default") return games;
+    return [...games].sort((a, b) =>
+      sort === "a-z"
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title),
+    );
   }, [games, sort]);
 
   return (
@@ -31,18 +43,23 @@ export default function Category() {
         title={`${catInfo.label} Games`}
         description={`Play the best free ${catInfo.label.toLowerCase()} games online. No downloads — instant play in your browser.`}
         path={`/category/${slug}`}
-        jsonLd={buildBreadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: catInfo.label, path: `/category/${slug}` }])}
+        jsonLd={buildBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: catInfo.label, path: `/category/${slug}` },
+        ])}
       />
       {/* Category Hero */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="px-5 py-8 bg-gradient-to-br from-dark-600/50 to-dark-900 border-b border-neon-cyan/5"
+        className="px-5 py-8 bg-linear-to-br from-dark-600/50 to-dark-900 border-b border-neon-cyan/5"
       >
         <div className="text-5xl mb-3">{catInfo.icon}</div>
-        <h1 className="font-display text-2xl font-black text-white mb-1">{catInfo.label}</h1>
+        <h1 className="font-display text-2xl font-black text-white mb-1">
+          {catInfo.label}
+        </h1>
         <p className="text-sm text-dim">
-          {loading ? 'Loading games...' : `${games.length} games loaded`}
+          {loading ? "Loading games..." : `${games.length} games loaded`}
         </p>
       </motion.div>
 
@@ -59,17 +76,23 @@ export default function Category() {
             title="No Games Found"
             message="Try browsing a different category"
             action={
-              <Link to="/browse" className="btn-cyber text-xs mt-4">Browse All</Link>
+              <Link to="/browse" className="btn-cyber text-xs mt-4">
+                Browse All
+              </Link>
             }
           />
         ) : (
-          <div className="grid grid-cols-2 gap-3 px-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4">
             {sorted.map((game, i) => (
               <GameCard
                 key={game.id}
                 game={game}
                 index={i}
-                badge={i < 3 ? { label: `#${i + 1}`, type: i === 0 ? 'hot' : '' } : null}
+                badge={
+                  i < 3
+                    ? { label: `#${i + 1}`, type: i === 0 ? "hot" : "" }
+                    : null
+                }
                 onFavorite={toggleFavorite}
                 isFavorite={isFavorite(game.id)}
               />
@@ -83,7 +106,9 @@ export default function Category() {
             {loadingMore && (
               <div className="flex items-center gap-2 text-neon-cyan/60">
                 <Loader2 size={18} className="animate-spin" />
-                <span className="text-xs font-display tracking-wider">LOADING MORE...</span>
+                <span className="text-xs font-display tracking-wider">
+                  LOADING MORE...
+                </span>
               </div>
             )}
           </div>

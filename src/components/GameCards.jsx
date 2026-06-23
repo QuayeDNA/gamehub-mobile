@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getCategoryMeta } from '../services/gameApi';
-import { getCategoryIcon } from '../utils/helpers';
+import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { getCategoryMeta } from "../services/gameApi";
+import { getCategoryIcon } from "../utils/helpers";
 
 // ── Reusable image with fallback ─────────────────────────────────────────
 
@@ -12,8 +12,13 @@ function GameImage({ src, alt, className, fallbackIcon, fallbackClassName }) {
 
   if (failed || !src) {
     return (
-      <div className={fallbackClassName || 'w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-600 to-dark-800 text-4xl'}>
-        {fallbackIcon || '🎮'}
+      <div
+        className={
+          fallbackClassName ||
+          "w-full h-full flex items-center justify-center bg-linear-to-br from-dark-600 to-dark-800 text-4xl"
+        }
+      >
+        {fallbackIcon || "🎮"}
       </div>
     );
   }
@@ -34,7 +39,7 @@ function GameImage({ src, alt, className, fallbackIcon, fallbackClassName }) {
 
 export function GameCard({ game, index = 0, badge, onFavorite, isFavorite }) {
   const icon = getCategoryIcon(game.category);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -44,7 +49,7 @@ export function GameCard({ game, index = 0, badge, onFavorite, isFavorite }) {
       <Link
         to={`/game/${encodeURIComponent(game.id)}`}
         state={{ game }}
-        className="group block rounded-2xl overflow-hidden bg-dark-700 border border-dark-500/30 
+        className="group block rounded-2xl overflow-hidden bg-dark-700 border border-dark-500/30
                    hover:border-neon-cyan/20 transition-all duration-300 active:scale-[0.97]"
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-dark-800">
@@ -54,38 +59,68 @@ export function GameCard({ game, index = 0, badge, onFavorite, isFavorite }) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             fallbackIcon={icon}
           />
-          
+
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-transparent" />
-          
+          <div className="absolute inset-0 bg-linear-to-t from-dark-900/60 via-transparent to-transparent" />
+
           {/* Badge */}
           {badge && (
-            <span className={`absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase
-              ${badge.type === 'hot' ? 'bg-neon-orange/90 text-white' : 
-                badge.type === 'new' ? 'bg-neon-green/90 text-dark-900' : 
-                'bg-neon-cyan/90 text-dark-900'}`}>
+            <span
+              className={`absolute top-2 left-2 px-2 py-0.5 rounded-md text-[10px] font-display font-bold tracking-wider uppercase
+              ${
+                badge.type === "hot"
+                  ? "bg-neon-orange/90 text-white"
+                  : badge.type === "new"
+                    ? "bg-neon-green/90 text-dark-900"
+                    : "bg-neon-cyan/90 text-dark-900"
+              }`}
+            >
               {badge.label}
+            </span>
+          )}
+
+          {/* Desktop-only badge — shown when game.mobile is explicitly false */}
+          {game.mobile === false && (
+            <span
+              className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5
+                             rounded-md bg-dark-900/80 backdrop-blur-sm border border-white/10
+                             text-[9px] font-display font-bold text-white/50 tracking-wider
+                             pointer-events-none select-none"
+            >
+              🖥️ PC
             </span>
           )}
 
           {/* Play overlay on hover */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="w-12 h-12 rounded-full bg-neon-cyan/20 backdrop-blur-md flex items-center justify-center border border-neon-cyan/40">
-              <Play size={20} className="text-neon-cyan ml-0.5" fill="currentColor" />
+              <Play
+                size={20}
+                className="text-neon-cyan ml-0.5"
+                fill="currentColor"
+              />
             </div>
           </div>
 
           {/* Favorite button */}
           {onFavorite && (
             <button
-              onClick={e => { e.preventDefault(); e.stopPropagation(); onFavorite(game); }}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onFavorite(game);
+              }}
               className="absolute top-2 right-2 w-8 h-8 rounded-full bg-dark-900/60 backdrop-blur-sm flex items-center justify-center
                          transition-all active:scale-90 z-10"
-              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              aria-label={
+                isFavorite ? "Remove from favorites" : "Add to favorites"
+              }
             >
               <Heart
                 size={14}
-                className={isFavorite ? 'text-neon-pink fill-neon-pink' : 'text-white/60'}
+                className={
+                  isFavorite ? "text-neon-pink fill-neon-pink" : "text-white/60"
+                }
               />
             </button>
           )}
@@ -97,7 +132,11 @@ export function GameCard({ game, index = 0, badge, onFavorite, isFavorite }) {
           </h3>
           <p className="text-[11px] text-dim mt-1 flex items-center gap-1">
             <span>{icon}</span>
-            <span className="truncate">{getCategoryMeta(game.category)?.label || game.categoryRaw || 'Game'}</span>
+            <span className="truncate">
+              {getCategoryMeta(game.category)?.label ||
+                game.categoryRaw ||
+                "Game"}
+            </span>
           </p>
         </div>
       </Link>
@@ -122,27 +161,37 @@ export function HorizontalCard({ game, index = 0 }) {
         state={{ game }}
         className="group block"
       >
-        <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-dark-700 border border-dark-500/20 
-                        group-hover:border-neon-cyan/20 transition-all duration-300 active:scale-[0.97]">
+        <div
+          className="relative aspect-[16/10] rounded-xl overflow-hidden bg-dark-700 border border-dark-500/20
+                        group-hover:border-neon-cyan/20 transition-all duration-300 active:scale-[0.97]"
+        >
           <GameImage
             src={game.thumbnail}
             alt={game.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             fallbackIcon={icon}
-            fallbackClassName="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-600 to-dark-800 text-3xl"
+            fallbackClassName="w-full h-full flex items-center justify-center bg-linear-to-br from-dark-600 to-dark-800 text-3xl"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-900/50 to-transparent" />
-          
+          <div className="absolute inset-0 bg-linear-to-t from-dark-900/50 to-transparent" />
+
           {/* Play icon */}
-          <div className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-neon-cyan/20 backdrop-blur-sm flex items-center justify-center 
-                          border border-neon-cyan/30 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Play size={12} className="text-neon-cyan ml-px" fill="currentColor" />
+          <div
+            className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-neon-cyan/20 backdrop-blur-sm flex items-center justify-center
+                          border border-neon-cyan/30 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Play
+              size={12}
+              className="text-neon-cyan ml-px"
+              fill="currentColor"
+            />
           </div>
         </div>
         <h3 className="text-xs font-semibold text-white/80 mt-2 truncate px-1">
           {game.title}
         </h3>
-        <p className="text-[10px] text-dim truncate px-1">{getCategoryMeta(game.category)?.label || game.categoryRaw || ''}</p>
+        <p className="text-[10px] text-dim truncate px-1">
+          {getCategoryMeta(game.category)?.label || game.categoryRaw || ""}
+        </p>
       </Link>
     </motion.div>
   );
@@ -178,7 +227,7 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
 
     autoPlayRef.current = setTimeout(() => {
       setDirection(1);
-      setCurrentIndex(i => (i + 1) % carouselGames.length);
+      setCurrentIndex((i) => (i + 1) % carouselGames.length);
     }, AUTO_PLAY_MS);
 
     return () => {
@@ -250,18 +299,18 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
             alt={game.title}
             className="w-full h-full object-cover"
             fallbackIcon={icon}
-            fallbackClassName="w-full h-full bg-gradient-to-br from-dark-600 to-dark-800 flex items-center justify-center text-6xl"
+            fallbackClassName="w-full h-full bg-linear-to-br from-dark-600 to-dark-800 flex items-center justify-center text-6xl"
           />
         </motion.div>
       </AnimatePresence>
 
       {/* Multi-layer gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/50 to-dark-900/20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-dark-900/60 via-transparent to-dark-900/40" />
-      <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-dark-900/50 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-dark-900 via-dark-900/50 to-dark-900/20" />
+      <div className="absolute inset-0 bg-linear-to-r from-dark-900/60 via-transparent to-dark-900/40" />
+      <div className="absolute top-0 inset-x-0 h-20 bg-linear-to-b from-dark-900/50 to-transparent" />
 
       {/* Neon accent line at top */}
-      <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-[2px] bg-linear-to-r from-transparent via-neon-cyan/40 to-transparent" />
 
       {/* Content card — glassmorphism */}
       <Link
@@ -276,10 +325,10 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
           transition={{ delay: 0.15, duration: 0.4 }}
           className="rounded-2xl overflow-hidden"
           style={{
-            background: 'rgba(10, 10, 15, 0.65)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(0, 245, 255, 0.12)',
+            background: "rgba(10, 10, 15, 0.65)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(0, 245, 255, 0.12)",
           }}
         >
           <div className="flex items-center gap-3 p-3">
@@ -301,25 +350,32 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
                   Featured
                 </span>
                 <span className="text-[10px] text-white/40 flex items-center gap-1">
-                  {icon} {getCategoryMeta(game.category)?.label || 'Game'}
+                  {icon} {getCategoryMeta(game.category)?.label || "Game"}
                 </span>
               </div>
               <h2 className="font-display text-sm font-black text-white leading-tight truncate">
                 {game.title}
               </h2>
               <p className="text-[11px] text-white/50 line-clamp-1 mt-0.5">
-                {game.description || 'Play this amazing game now!'}
+                {game.description || "Play this amazing game now!"}
               </p>
             </div>
 
             {/* Play button */}
-            <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
-                 style={{
-                   background: 'linear-gradient(135deg, rgba(0,245,255,0.25), rgba(191,0,255,0.25))',
-                   border: '1px solid rgba(0,245,255,0.35)',
-                   boxShadow: '0 0 20px rgba(0,245,255,0.15)',
-                 }}>
-              <Play size={18} className="text-neon-cyan ml-0.5" fill="currentColor" />
+            <div
+              className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(0,245,255,0.25), rgba(191,0,255,0.25))",
+                border: "1px solid rgba(0,245,255,0.35)",
+                boxShadow: "0 0 20px rgba(0,245,255,0.15)",
+              }}
+            >
+              <Play
+                size={18}
+                className="text-neon-cyan ml-0.5"
+                fill="currentColor"
+              />
             </div>
           </div>
         </motion.div>
@@ -338,13 +394,15 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
             onClick={goNext}
             className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-white/50 hover:text-white/70 transition-colors"
             style={{
-              background: 'rgba(10,10,15,0.5)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: "rgba(10,10,15,0.5)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <span className="text-[9px] font-display tracking-wider uppercase">Up Next</span>
+            <span className="text-[9px] font-display tracking-wider uppercase">
+              Up Next
+            </span>
             <ChevronRight size={12} />
           </button>
         </motion.div>
@@ -355,9 +413,9 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
         <div
           className="px-2 py-1 rounded-lg text-[10px] font-display font-bold text-white/50 tracking-wider"
           style={{
-            background: 'rgba(10,10,15,0.5)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
+            background: "rgba(10,10,15,0.5)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
           }}
         >
           {currentIndex + 1} / {carouselGames.length}
@@ -374,8 +432,8 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
               onClick={() => goToSlide(i)}
               className={`rounded-full transition-all duration-300 ${
                 i === currentIndex
-                  ? 'bg-neon-cyan w-2 h-2 shadow-[0_0_6px_rgba(0,245,255,0.5)]'
-                  : 'bg-white/20 w-1.5 h-1.5 hover:bg-white/40'
+                  ? "bg-neon-cyan w-2 h-2 shadow-[0_0_6px_rgba(0,245,255,0.5)]"
+                  : "bg-white/20 w-1.5 h-1.5 hover:bg-white/40"
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
@@ -388,7 +446,7 @@ export function FeaturedCarousel({ games = [], maxGames = 8 }) {
             className="h-full rounded-full"
             style={{
               width: `${progress * 100}%`,
-              background: 'linear-gradient(90deg, #00f5ff, #bf00ff)',
+              background: "linear-gradient(90deg, #00f5ff, #bf00ff)",
             }}
           />
         </div>
@@ -411,7 +469,7 @@ export function FeaturedCard({ game, index = 0 }) {
       <Link
         to={`/game/${encodeURIComponent(game.id)}`}
         state={{ game }}
-        className="group block mx-4 mb-3 rounded-2xl overflow-hidden bg-dark-700 neon-border 
+        className="group block mx-4 mb-3 rounded-2xl overflow-hidden bg-dark-700 neon-border
                    hover:neon-border-active transition-all duration-300 active:scale-[0.98]"
       >
         <div className="flex items-center gap-3 p-3">
@@ -428,22 +486,33 @@ export function FeaturedCard({ game, index = 0 }) {
 
           {/* Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-white/90 truncate">{game.title}</h3>
+            <h3 className="text-sm font-bold text-white/90 truncate">
+              {game.title}
+            </h3>
             <p className="text-xs text-dim mt-1 line-clamp-2 leading-relaxed">
-              {game.description || 'Play this exciting game now!'}
+              {game.description || "Play this exciting game now!"}
             </p>
             <div className="flex items-center gap-2 mt-2">
               <span className="text-[10px] text-dim flex items-center gap-1">
-                <span>{icon}</span> {getCategoryMeta(game.category)?.label || game.categoryRaw || ''}
+                <span>{icon}</span>{" "}
+                {getCategoryMeta(game.category)?.label ||
+                  game.categoryRaw ||
+                  ""}
               </span>
             </div>
           </div>
 
           {/* Play button */}
-          <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-neon-cyan/20 to-neon-purple/20 
-                          border border-neon-cyan/20 flex items-center justify-center
-                          group-hover:from-neon-cyan/30 group-hover:to-neon-purple/30 transition-all">
-            <Play size={16} className="text-neon-cyan ml-0.5" fill="currentColor" />
+          <div
+            className="flex-shrink-0 w-10 h-10 rounded-xl bg-linear-to-br from-neon-cyan/20 to-neon-purple/20
+                                      border border-neon-cyan/20 flex items-center justify-center
+                                      group-hover:from-neon-cyan/30 group-hover:to-neon-purple/30 transition-all"
+          >
+            <Play
+              size={16}
+              className="text-neon-cyan ml-0.5"
+              fill="currentColor"
+            />
           </div>
         </div>
       </Link>
@@ -473,7 +542,7 @@ export function HeroBanner({ game }) {
           alt={game.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           fallbackIcon={icon}
-          fallbackClassName="w-full h-full bg-gradient-to-br from-dark-600 to-dark-800 flex items-center justify-center text-6xl"
+          fallbackClassName="w-full h-full bg-linear-to-br from-dark-600 to-dark-800 flex items-center justify-center text-6xl"
         />
 
         {/* Gradient overlays */}

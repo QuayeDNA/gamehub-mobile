@@ -1,22 +1,23 @@
-import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Trash2 } from 'lucide-react';
-import { useCollections } from '../hooks/useCollections';
-import { useFavorites } from '../hooks/useFavorites';
-import { PageLayout, Header, EmptyState } from '../components/Layout';
-import { GameCard } from '../components/GameCards';
-import useDocumentTitle from '../hooks/useDocumentTitle';
-import SEO from '../components/SEO';
+import React from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Trash2 } from "lucide-react";
+import { useCollections } from "../hooks/useCollections";
+import { useFavorites } from "../hooks/useFavorites";
+import { PageLayout, Header, EmptyState } from "../components/Layout";
+import { GameCard } from "../components/GameCards";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import SEO from "../components/SEO";
 
 export default function Collection() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getCollection, removeGameFromCollection, deleteCollection } = useCollections();
+  const { getCollection, removeGameFromCollection, deleteCollection } =
+    useCollections();
   const { toggleFavorite, isFavorite } = useFavorites();
 
   const col = getCollection(id);
-  useDocumentTitle(col?.name || 'Collection');
+  useDocumentTitle(col?.name || "Collection");
 
   if (!col) {
     return (
@@ -25,7 +26,11 @@ export default function Collection() {
           icon="📁"
           title="Collection Not Found"
           message="This collection doesn't exist or was deleted."
-          action={<Link to="/favorites" className="btn-cyber text-xs mt-4">Back to Favorites</Link>}
+          action={
+            <Link to="/favorites" className="btn-cyber text-xs mt-4">
+              Back to Favorites
+            </Link>
+          }
         />
       </PageLayout>
     );
@@ -33,7 +38,7 @@ export default function Collection() {
 
   const handleDelete = () => {
     deleteCollection(id);
-    navigate('/favorites', { replace: true });
+    navigate("/favorites", { replace: true });
   };
 
   return (
@@ -57,18 +62,22 @@ export default function Collection() {
     >
       <SEO
         title={col.name}
-        description={`${col.emoji} ${col.name} — a custom collection of ${col.games.length} game${col.games.length !== 1 ? 's' : ''} on GameHub.`}
+        description={`${col.emoji} ${col.name} — a custom collection of ${col.games.length} game${col.games.length !== 1 ? "s" : ""} on GameHub.`}
         path={`/collection/${id}`}
         noindex={true}
       />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="px-5 py-6 bg-gradient-to-br from-dark-600/50 to-dark-900 border-b border-neon-cyan/5"
+        className="px-5 py-6 bg-linear-to-br from-dark-600/50 to-dark-900 border-b border-neon-cyan/5"
       >
         <div className="text-5xl mb-3">{col.emoji}</div>
-        <h1 className="font-display text-2xl font-black text-white mb-1">{col.name}</h1>
-        <p className="text-sm text-dim">{col.games.length} game{col.games.length !== 1 ? 's' : ''}</p>
+        <h1 className="font-display text-2xl font-black text-white mb-1">
+          {col.name}
+        </h1>
+        <p className="text-sm text-dim">
+          {col.games.length} game{col.games.length !== 1 ? "s" : ""}
+        </p>
       </motion.div>
 
       {col.games.length === 0 ? (
@@ -76,10 +85,14 @@ export default function Collection() {
           icon="🎮"
           title="Empty Collection"
           message="Add games from any game detail page"
-          action={<Link to="/" className="btn-cyber text-xs mt-4">Discover Games</Link>}
+          action={
+            <Link to="/" className="btn-cyber text-xs mt-4">
+              Discover Games
+            </Link>
+          }
         />
       ) : (
-        <div className="grid grid-cols-2 gap-3 px-4 py-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4 py-4">
           {col.games.map((game, i) => (
             <div key={game.id} className="relative">
               <GameCard

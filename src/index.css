@@ -1,181 +1,444 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* ════════════════════════════════════════════════════════════════════════
+   THEME
+   All design tokens live here. Tailwind v4 reads this @theme block and
+   generates the corresponding utility classes automatically — no
+   tailwind.config.js needed.
+   ════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+    /* ── Colors ──────────────────────────────────────────────────────────── */
+    --color-neon-cyan: #00f5ff;
+    --color-neon-purple: #bf00ff;
+    --color-neon-green: #39ff14;
+    --color-neon-orange: #ff6a00;
+    --color-neon-pink: #ff006e;
+
+    --color-dark-950: #05050a;
+    --color-dark-900: #0a0a0f;
+    --color-dark-800: #0f0f18;
+    --color-dark-700: #12121a;
+    --color-dark-600: #1a1a2e;
+    --color-dark-500: #22223a;
+    --color-dark-400: #2a2a44;
+    --color-dark-300: #333355;
+
+    --color-dim: #8888aa;
+
+    /* ── Typography ─────────────────────────────────────────────────────── */
+    --font-display: "Orbitron", monospace;
+    --font-body: "Rajdhani", "Segoe UI", sans-serif;
+
+    /* ── Animations ─────────────────────────────────────────────────────── */
+    --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+    --animate-slide-up: slide-up 0.4s ease-out;
+    --animate-slide-in-right: slide-in-right 0.3s ease-out;
+    --animate-fade-in: fade-in 0.3s ease-out;
+    --animate-shimmer: shimmer 1.5s infinite linear;
+    --animate-float: float 3s ease-in-out infinite;
+    --animate-neon-flicker: neon-flicker 3s infinite;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────────────── */
+
+@keyframes glow-pulse {
+    0%,
+    100% {
+        box-shadow:
+            0 0 5px #00f5ff44,
+            0 0 20px #00f5ff22;
+    }
+    50% {
+        box-shadow:
+            0 0 15px #00f5ff88,
+            0 0 40px #00f5ff44;
+    }
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shimmer {
+    from {
+        background-position: -200% 0;
+    }
+    to {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes neon-flicker {
+    0%,
+    92%,
+    94%,
+    97%,
+    100% {
+        opacity: 1;
+    }
+    93%,
+    96% {
+        opacity: 0.3;
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   BASE
+   ════════════════════════════════════════════════════════════════════════ */
 
 @layer base {
-  :root {
-    --bg-primary: #0a0a0f;
-    --bg-secondary: #12121a;
-    --bg-card: rgba(18, 18, 26, 0.8);
-    --bg-card-heavy: rgba(10, 10, 15, 0.95);
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.8);
-    --text-dim: #8888aa;
-    --border-subtle: rgba(0, 245, 255, 0.08);
-  }
+    :root {
+        --bg-primary: #0a0a0f;
+        --bg-secondary: #12121a;
+        --bg-card: rgba(18, 18, 26, 0.8);
+        --bg-card-heavy: rgba(10, 10, 15, 0.95);
+        --text-primary: #ffffff;
+        --text-secondary: rgba(255, 255, 255, 0.8);
+        --text-dim: #8888aa;
+        --border-subtle: rgba(0, 245, 255, 0.08);
+    }
 
-  [data-theme="light"] {
-    --bg-primary: #f0f2f5;
-    --bg-secondary: #e4e6eb;
-    --bg-card: rgba(255, 255, 255, 0.85);
-    --bg-card-heavy: rgba(240, 242, 245, 0.97);
-    --text-primary: #1a1a2e;
-    --text-secondary: rgba(26, 26, 46, 0.8);
-    --text-dim: #6b7280;
-    --border-subtle: rgba(0, 0, 0, 0.1);
-  }
+    [data-theme="light"] {
+        --bg-primary: #f0f2f5;
+        --bg-secondary: #e4e6eb;
+        --bg-card: rgba(255, 255, 255, 0.85);
+        --bg-card-heavy: rgba(240, 242, 245, 0.97);
+        --text-primary: #1a1a2e;
+        --text-secondary: rgba(26, 26, 46, 0.8);
+        --text-dim: #6b7280;
+        --border-subtle: rgba(0, 0, 0, 0.1);
+    }
 
-  /* Light theme overrides for common surfaces */
-  [data-theme="light"] body {
+    /* Remove tap highlight on mobile */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Accessible focus ring */
+    :focus-visible {
+        outline: 2px solid #00f5ff;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    /* Thin scrollbar for non-hidden scroll containers */
+    ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #00f5ff33;
+        border-radius: 2px;
+    }
+
+    /* Hidden scrollbar utility — used on horizontal scroll rows */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   LIGHT-THEME SURFACE OVERRIDES
+
+   *** MUST be outside @layer — this is intentional ***
+
+   In Tailwind v4 (native CSS Cascade Layers), @layer utilities has higher
+   priority than @layer base regardless of selector specificity. Unlayered
+   CSS always beats all @layer blocks, so placing these overrides here is
+   the only way to reliably override utility classes in light mode.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Background surfaces ─────────────────────────────────────────────── */
+[data-theme="light"] body {
     background: var(--bg-primary);
     color: var(--text-primary);
-  }
+}
+[data-theme="light"] .bg-dark-950 {
+    background: #e0e2e7;
+}
+[data-theme="light"] .bg-dark-900 {
+    background: var(--bg-primary);
+}
+[data-theme="light"] .bg-dark-800 {
+    background: var(--bg-secondary);
+}
+[data-theme="light"] .bg-dark-700 {
+    background: #dfe1e6;
+}
+[data-theme="light"] .bg-dark-600 {
+    background: #ccd0d5;
+}
+[data-theme="light"] .bg-dark-500 {
+    background: #b8bcc4;
+}
+[data-theme="light"] .bg-dark-400 {
+    background: #a8acb4;
+}
 
-  [data-theme="light"] .bg-dark-900 { background: var(--bg-primary); }
-  [data-theme="light"] .bg-dark-800 { background: var(--bg-secondary); }
-  [data-theme="light"] .bg-dark-700 { background: #dfe1e6; }
-  [data-theme="light"] .bg-dark-700\/50 { background: rgba(223, 225, 230, 0.5); }
-  [data-theme="light"] .bg-dark-700\/40 { background: rgba(223, 225, 230, 0.4); }
-  [data-theme="light"] .bg-dark-700\/30 { background: rgba(223, 225, 230, 0.3); }
-  [data-theme="light"] .bg-dark-600 { background: #ccd0d5; }
-  [data-theme="light"] .bg-dark-600\/50 { background: rgba(204, 208, 213, 0.5); }
-  [data-theme="light"] .text-white { color: var(--text-primary); }
-  [data-theme="light"] .text-white\/90 { color: var(--text-secondary); }
-  [data-theme="light"] .text-white\/80 { color: rgba(26, 26, 46, 0.7); }
-  [data-theme="light"] .text-white\/70 { color: rgba(26, 26, 46, 0.6); }
-  [data-theme="light"] .text-white\/60 { color: rgba(26, 26, 46, 0.5); }
-  [data-theme="light"] .text-dim { color: var(--text-dim); }
-  [data-theme="light"] .glass {
+/* ── Opacity variants (most-used in JSX) ─────────────────────────────── */
+[data-theme="light"] .bg-dark-700\/50 {
+    background: rgba(223, 225, 230, 0.5);
+}
+[data-theme="light"] .bg-dark-700\/40 {
+    background: rgba(223, 225, 230, 0.4);
+}
+[data-theme="light"] .bg-dark-700\/30 {
+    background: rgba(223, 225, 230, 0.3);
+}
+[data-theme="light"] .bg-dark-700\/20 {
+    background: rgba(223, 225, 230, 0.2);
+}
+[data-theme="light"] .bg-dark-600\/50 {
+    background: rgba(204, 208, 213, 0.5);
+}
+[data-theme="light"] .bg-dark-600\/30 {
+    background: rgba(204, 208, 213, 0.3);
+}
+[data-theme="light"] .bg-dark-600\/20 {
+    background: rgba(204, 208, 213, 0.2);
+}
+[data-theme="light"] .bg-dark-800\/80 {
+    background: rgba(240, 242, 245, 0.85);
+}
+[data-theme="light"] .bg-dark-800\/50 {
+    background: rgba(240, 242, 245, 0.55);
+}
+[data-theme="light"] .bg-dark-800\/30 {
+    background: rgba(240, 242, 245, 0.35);
+}
+[data-theme="light"] .bg-dark-900\/95 {
+    background: rgba(240, 242, 245, 0.97);
+}
+[data-theme="light"] .bg-dark-900\/80 {
+    background: rgba(240, 242, 245, 0.85);
+}
+[data-theme="light"] .bg-dark-900\/60 {
+    background: rgba(240, 242, 245, 0.65);
+}
+[data-theme="light"] .bg-dark-950\/95 {
+    background: rgba(235, 237, 242, 0.97);
+}
+[data-theme="light"] .bg-dark-950\/90 {
+    background: rgba(235, 237, 242, 0.93);
+}
+[data-theme="light"] .bg-dark-950\/80 {
+    background: rgba(235, 237, 242, 0.85);
+}
+[data-theme="light"] .bg-dark-950\/70 {
+    background: rgba(235, 237, 242, 0.75);
+}
+
+/* ── Text colours ────────────────────────────────────────────────────── */
+[data-theme="light"] .text-white {
+    color: var(--text-primary);
+}
+[data-theme="light"] .text-white\/90 {
+    color: var(--text-secondary);
+}
+[data-theme="light"] .text-white\/80 {
+    color: rgba(26, 26, 46, 0.72);
+}
+[data-theme="light"] .text-white\/70 {
+    color: rgba(26, 26, 46, 0.62);
+}
+[data-theme="light"] .text-white\/60 {
+    color: rgba(26, 26, 46, 0.52);
+}
+[data-theme="light"] .text-white\/50 {
+    color: rgba(26, 26, 46, 0.42);
+}
+[data-theme="light"] .text-white\/40 {
+    color: rgba(26, 26, 46, 0.32);
+}
+[data-theme="light"] .text-white\/30 {
+    color: rgba(26, 26, 46, 0.24);
+}
+[data-theme="light"] .text-dim {
+    color: var(--text-dim);
+}
+
+/* ── Component classes ───────────────────────────────────────────────── */
+[data-theme="light"] .glass {
     background: var(--bg-card);
     border-color: var(--border-subtle);
-  }
-  [data-theme="light"] .glass-heavy {
-    background: var(--bg-card-heavy);
-  }
-  [data-theme="light"] .skeleton-shimmer {
-    background-color: #d1d5db;
-  }
-
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Accessible focus ring */
-  :focus-visible {
-    outline: 2px solid #00f5ff;
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #00f5ff33;
-    border-radius: 2px;
-  }
-
-  /* Hide scrollbar for horizontal scroll containers */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
 }
+[data-theme="light"] .glass-heavy {
+    background: var(--bg-card-heavy);
+}
+[data-theme="light"] .skeleton-shimmer {
+    background-color: #d1d5db;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   COMPONENTS
+   ════════════════════════════════════════════════════════════════════════ */
 
 @layer components {
-  /* Neon glow text */
-  .text-neon-glow {
-    text-shadow: 0 0 10px #00f5ff88, 0 0 30px #00f5ff44, 0 0 60px #00f5ff22;
-  }
+    /* ── Neon glow text ───────────────────────────────────────────────── */
+    .text-neon-glow {
+        text-shadow:
+            0 0 10px #00f5ff88,
+            0 0 30px #00f5ff44,
+            0 0 60px #00f5ff22;
+    }
 
-  .text-neon-purple-glow {
-    text-shadow: 0 0 10px #bf00ff88, 0 0 30px #bf00ff44;
-  }
+    .text-neon-purple-glow {
+        text-shadow:
+            0 0 10px #bf00ff88,
+            0 0 30px #bf00ff44;
+    }
 
-  /* Glass card effect */
-  .glass {
-    background: rgba(18, 18, 26, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 245, 255, 0.08);
-  }
+    /* ── Glass surfaces ──────────────────────────────────────────────── */
+    .glass {
+        background: rgba(18, 18, 26, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 245, 255, 0.08);
+    }
 
-  .glass-heavy {
-    background: rgba(10, 10, 15, 0.95);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-  }
+    .glass-heavy {
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
 
-  /* Neon border glow */
-  .neon-border {
-    border: 1px solid rgba(0, 245, 255, 0.15);
-    box-shadow: 0 0 15px rgba(0, 245, 255, 0.05), inset 0 0 15px rgba(0, 245, 255, 0.02);
-  }
+    /* ── Neon border ─────────────────────────────────────────────────── */
+    .neon-border {
+        border: 1px solid rgba(0, 245, 255, 0.15);
+        box-shadow:
+            0 0 15px rgba(0, 245, 255, 0.05),
+            inset 0 0 15px rgba(0, 245, 255, 0.02);
+    }
 
-  .neon-border-active {
-    border: 1px solid rgba(0, 245, 255, 0.4);
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.15), inset 0 0 20px rgba(0, 245, 255, 0.05);
-  }
+    .neon-border-active {
+        border: 1px solid rgba(0, 245, 255, 0.4);
+        box-shadow:
+            0 0 20px rgba(0, 245, 255, 0.15),
+            inset 0 0 20px rgba(0, 245, 255, 0.05);
+    }
 
-  /* Shimmer loading */
-  .skeleton-shimmer {
-    @apply bg-dark-600 rounded-xl;
-    background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite linear;
-  }
+    /* ── Skeleton shimmer ────────────────────────────────────────────── */
+    .skeleton-shimmer {
+        @apply bg-dark-600 rounded-xl;
+        background-image: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.04) 50%,
+            transparent 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite linear;
+    }
 
-  /* Gradient overlays */
-  .gradient-fade-b {
-    background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 15, 0.7) 50%, rgba(10, 10, 15, 0.98) 100%);
-  }
+    /* ── Gradient overlays ───────────────────────────────────────────── */
+    .gradient-fade-b {
+        background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(10, 10, 15, 0.7) 50%,
+            rgba(10, 10, 15, 0.98) 100%
+        );
+    }
 
-  .gradient-fade-t {
-    background: linear-gradient(to top, transparent 0%, rgba(10, 10, 15, 0.8) 100%);
-  }
+    .gradient-fade-t {
+        background: linear-gradient(
+            to top,
+            transparent 0%,
+            rgba(10, 10, 15, 0.8) 100%
+        );
+    }
 
-  /* Cyber button */
-  .btn-cyber {
-    @apply relative font-display font-bold tracking-wider uppercase px-6 py-3 rounded-xl
-           bg-gradient-to-r from-neon-cyan/20 to-neon-purple/20 
+    /* ── Buttons ─────────────────────────────────────────────────────── */
+    .btn-cyber {
+        @apply relative font-display font-bold tracking-wider uppercase
+           px-6 py-3 rounded-xl
+           bg-linear-to-r from-neon-cyan/20 to-neon-purple/20
            border border-neon-cyan/30 text-neon-cyan
            transition-all duration-300 active:scale-95;
-  }
-  .btn-cyber:hover {
-    @apply border-neon-cyan/60 shadow-lg shadow-neon-cyan/20;
-  }
+    }
+    .btn-cyber:hover {
+        @apply border-neon-cyan/60 shadow-lg shadow-neon-cyan/20;
+    }
 
-  .btn-play {
-    @apply relative font-display font-bold tracking-wider uppercase px-8 py-3.5 rounded-xl
-           bg-gradient-to-r from-neon-cyan to-neon-purple text-dark-900
-           transition-all duration-300 active:scale-95 text-sm;
-    box-shadow: 0 0 30px rgba(0, 245, 255, 0.3), 0 0 60px rgba(191, 0, 255, 0.15);
-  }
-  .btn-play:hover {
-    box-shadow: 0 0 40px rgba(0, 245, 255, 0.5), 0 0 80px rgba(191, 0, 255, 0.25);
-  }
+    .btn-play {
+        @apply relative font-display font-bold tracking-wider uppercase
+           px-8 py-3.5 rounded-xl text-sm
+           bg-linear-to-r from-neon-cyan to-neon-purple text-dark-900
+           transition-all duration-300 active:scale-95;
+        box-shadow:
+            0 0 30px rgba(0, 245, 255, 0.3),
+            0 0 60px rgba(191, 0, 255, 0.15);
+    }
+    .btn-play:hover {
+        box-shadow:
+            0 0 40px rgba(0, 245, 255, 0.5),
+            0 0 80px rgba(191, 0, 255, 0.25);
+    }
 
-  /* Category pill */
-  .pill {
-    @apply flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide
+    /* ── Category pill ───────────────────────────────────────────────── */
+    .pill {
+        @apply flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide
            border border-dark-400 text-dim bg-dark-700
            transition-all duration-200 active:scale-95 whitespace-nowrap;
-  }
-  .pill-active {
-    @apply border-neon-cyan/50 text-neon-cyan bg-neon-cyan/10;
-    box-shadow: 0 0 15px rgba(0, 245, 255, 0.1);
-  }
+    }
+    .pill-active {
+        @apply border-neon-cyan/50 text-neon-cyan bg-neon-cyan/10;
+        box-shadow: 0 0 15px rgba(0, 245, 255, 0.1);
+    }
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   UTILITIES
+   ════════════════════════════════════════════════════════════════════════ */
+
 @layer utilities {
-  .safe-bottom {
-    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-  }
+    /* Safe area padding for notched devices */
+    .safe-bottom {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
 }

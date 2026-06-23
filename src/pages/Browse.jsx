@@ -1,26 +1,38 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
-import { CATEGORIES, SOURCES } from '../services/gameApi';
-import { useInfiniteGames, useIntersectionLoader } from '../hooks/useGames';
-import { useFavorites } from '../hooks/useFavorites';
-import { PageLayout, Header, SectionHeader, SkeletonGrid, SortBar } from '../components/Layout';
-import { GameCard } from '../components/GameCards';
-import useDocumentTitle from '../hooks/useDocumentTitle';
-import SEO from '../components/SEO';
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
+import { CATEGORIES, SOURCES } from "../services/gameApi";
+import { useInfiniteGames, useIntersectionLoader } from "../hooks/useGames";
+import { useFavorites } from "../hooks/useFavorites";
+import {
+  PageLayout,
+  Header,
+  SectionHeader,
+  SkeletonGrid,
+  SortBar,
+} from "../components/Layout";
+import { GameCard } from "../components/GameCards";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import SEO from "../components/SEO";
 
 function sortGames(games, sort) {
-  if (sort === 'default') return games;
-  return [...games].sort((a, b) => sort === 'a-z' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
+  if (sort === "default") return games;
+  return [...games].sort((a, b) =>
+    sort === "a-z"
+      ? a.title.localeCompare(b.title)
+      : b.title.localeCompare(a.title),
+  );
 }
 
 export default function Browse() {
-  useDocumentTitle('Browse Games');
-  const { games, loading, loadingMore, hasMore, loadMore } = useInfiniteGames({ category: 'all' });
+  useDocumentTitle("Browse Games");
+  const { games, loading, loadingMore, hasMore, loadMore } = useInfiniteGames({
+    category: "all",
+  });
   const { toggleFavorite, isFavorite } = useFavorites();
   const sentinelRef = useIntersectionLoader(loadMore, hasMore, loadingMore);
-  const [sort, setSort] = useState('default');
+  const [sort, setSort] = useState("default");
   const sorted = useMemo(() => sortGames(games, sort), [games, sort]);
 
   return (
@@ -32,8 +44,8 @@ export default function Browse() {
       />
       {/* Category Grid */}
       <SectionHeader title="Categories" icon="🗂️" />
-      <div className="grid grid-cols-3 gap-2 px-4 pb-4">
-        {CATEGORIES.filter(c => c.slug !== 'all').map((cat, i) => (
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 px-4 pb-4">
+        {CATEGORIES.filter((c) => c.slug !== "all").map((cat, i) => (
           <motion.div
             key={cat.slug}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -42,7 +54,7 @@ export default function Browse() {
           >
             <Link
               to={`/category/${cat.slug}`}
-              className="flex flex-col items-center gap-1.5 py-5 px-2 rounded-2xl bg-dark-700/50 border border-dark-500/20 
+              className="flex flex-col items-center gap-1.5 py-5 px-2 rounded-2xl bg-dark-700/50 border border-dark-500/20
                          hover:border-neon-cyan/20 hover:bg-dark-600/50 transition-all active:scale-95 text-center"
             >
               <span className="text-3xl">{cat.icon}</span>
@@ -57,7 +69,7 @@ export default function Browse() {
       {/* Browse by Source */}
       <SectionHeader title="Game Sources" icon="🌐" />
       <div className="grid grid-cols-2 gap-2 px-4 pb-4">
-        {SOURCES.filter(s => s.slug !== 'all').map((src, i) => (
+        {SOURCES.filter((s) => s.slug !== "all").map((src, i) => (
           <motion.div
             key={src.slug}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -84,7 +96,7 @@ export default function Browse() {
       {loading ? (
         <SkeletonGrid count={6} />
       ) : (
-        <div className="grid grid-cols-2 gap-3 px-4 pb-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4 pb-2">
           {sorted.map((game, i) => (
             <GameCard
               key={game.id}
@@ -103,7 +115,9 @@ export default function Browse() {
           {loadingMore && (
             <div className="flex items-center gap-2 text-neon-cyan/60">
               <Loader2 size={18} className="animate-spin" />
-              <span className="text-xs font-display tracking-wider">LOADING MORE...</span>
+              <span className="text-xs font-display tracking-wider">
+                LOADING MORE...
+              </span>
             </div>
           )}
         </div>

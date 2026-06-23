@@ -1,0 +1,34 @@
+# GameHub — Cloudflare Worker configuration
+# ════════════════════════════════════════════════════════════════════════
+# Deploy with:  npx wrangler deploy
+# Login first:  npx wrangler login
+#
+# After deploying, Cloudflare will print your worker URL, e.g.:
+#   https://gamehub-cors-proxy.YOUR-SUBDOMAIN.workers.dev
+#
+# Copy that URL into .env.production:
+#   VITE_CORS_PROXY_URL=https://gamehub-cors-proxy.YOUR-SUBDOMAIN.workers.dev
+# Then rebuild:  npm run build
+# ════════════════════════════════════════════════════════════════════════
+
+name            = "gamehub-cors-proxy"
+main            = "workers/cors-proxy/index.js"
+compatibility_date = "2024-01-15"
+
+# Workers free tier limits (as of 2024):
+#   - 100,000 requests/day
+#   - 10ms CPU time per request
+#   - Global edge deployment (no region config needed)
+#
+# With Cloudflare edge caching (s-maxage=600) the effective request count
+# is much lower than raw game API calls — most responses are served from
+# cache without hitting the worker's CPU budget.
+
+# ── Optional: custom domain (uncomment and fill in to use your own domain)
+# [[routes]]
+# pattern = "proxy.yourdomain.com/*"
+# zone_name = "yourdomain.com"
+
+# ── Optional: environment-specific overrides
+# [env.staging]
+# name = "gamehub-cors-proxy-staging"

@@ -1,17 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Trash2, WifiOff, Download, FolderOpen, ChevronRight } from 'lucide-react';
-import { useFavorites, useRecentlyPlayed } from '../hooks/useFavorites';
-import { useOfflineGames } from '../hooks/useOfflineGames';
-import { useCollections } from '../hooks/useCollections';
-import { PageLayout, Header, SectionHeader, EmptyState } from '../components/Layout';
-import { GameCard, FeaturedCard } from '../components/GameCards';
-import useDocumentTitle from '../hooks/useDocumentTitle';
-import SEO from '../components/SEO';
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Trash2,
+  WifiOff,
+  Download,
+  FolderOpen,
+  ChevronRight,
+} from "lucide-react";
+import { useFavorites, useRecentlyPlayed } from "../hooks/useFavorites";
+import { useOfflineGames } from "../hooks/useOfflineGames";
+import { useCollections } from "../hooks/useCollections";
+import {
+  PageLayout,
+  Header,
+  SectionHeader,
+  EmptyState,
+} from "../components/Layout";
+import { GameCard, FeaturedCard } from "../components/GameCards";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import SEO from "../components/SEO";
 
 export default function Favorites() {
-  useDocumentTitle('Favorites');
+  useDocumentTitle("Favorites");
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { recent, clearRecent } = useRecentlyPlayed();
   const { offlineGames, removeOffline, clearOffline } = useOfflineGames();
@@ -58,7 +69,7 @@ export default function Favorites() {
           }
         />
       ) : (
-        <div className="grid grid-cols-2 gap-3 px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4">
           {favorites.map((game, i) => (
             <GameCard
               key={game.id}
@@ -89,8 +100,12 @@ export default function Favorites() {
                 >
                   <span className="text-2xl">{col.emoji}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">{col.name}</p>
-                    <p className="text-[10px] text-dim">{col.games.length} game{col.games.length !== 1 ? 's' : ''}</p>
+                    <p className="text-sm font-semibold text-white truncate">
+                      {col.name}
+                    </p>
+                    <p className="text-[10px] text-dim">
+                      {col.games.length} game{col.games.length !== 1 ? "s" : ""}
+                    </p>
                   </div>
                   <ChevronRight size={14} className="text-dim" />
                 </Link>
@@ -118,10 +133,11 @@ export default function Favorites() {
           <SectionHeader title="Available Offline" icon="📥" />
           <div className="px-4 pb-1">
             <p className="text-[11px] text-dim mb-3 flex items-center gap-1">
-              <WifiOff size={12} /> These games are cached and can be played without internet
+              <WifiOff size={12} /> These games are cached and can be played
+              without internet
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 px-4 pb-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4 pb-2">
             {offlineGames.map((game, i) => (
               <div key={game.id} className="relative">
                 <GameCard game={game} index={i} />
@@ -133,7 +149,9 @@ export default function Favorites() {
                   <Trash2 size={12} />
                 </button>
                 <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-neon-green/20 border border-neon-green/30 z-10">
-                  <span className="text-[9px] font-display font-bold text-neon-green tracking-wider">OFFLINE</span>
+                  <span className="text-[9px] font-display font-bold text-neon-green tracking-wider">
+                    OFFLINE
+                  </span>
                 </div>
               </div>
             ))}

@@ -1,46 +1,81 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, TrendingUp, Clock, Heart, Zap, Palette, X, Check, ChevronRight, Shield, Sun, Moon, Share2, ShieldCheck, ShieldAlert, ShieldOff, ToggleLeft, ToggleRight } from 'lucide-react';
-import { usePlayerStats } from '../hooks/usePlayerStats';
-import { useFavorites } from '../hooks/useFavorites';
-import { PageLayout, Header, SectionHeader } from '../components/Layout';
-import useDocumentTitle from '../hooks/useDocumentTitle';
-import { useTheme } from '../hooks/useTheme';
-import { useToast } from '../components/Toast';
-import { useSourcePrefs } from '../hooks/useSourcePrefs';
-import { SOURCES } from '../services/gameApi';
-import SEO from '../components/SEO';
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Trash2,
+  TrendingUp,
+  Clock,
+  Heart,
+  Zap,
+  Palette,
+  X,
+  Check,
+  ChevronRight,
+  Shield,
+  Sun,
+  Moon,
+  Share2,
+  ShieldCheck,
+  ShieldAlert,
+  ShieldOff,
+  ToggleLeft,
+  ToggleRight,
+} from "lucide-react";
+import { usePlayerStats } from "../hooks/usePlayerStats";
+import { useFavorites } from "../hooks/useFavorites";
+import { PageLayout, Header, SectionHeader } from "../components/Layout";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import { useTheme } from "../hooks/useTheme";
+import { useToast } from "../components/Toast";
+import { useSourcePrefs } from "../hooks/useSourcePrefs";
+import { SOURCES } from "../services/gameApi";
+import SEO from "../components/SEO";
 
 // ── DiceBear Avatar Configuration ──────────────────────────────────────
 // Free API — generates unique SVG avatars from a seed string.
 
 const AVATAR_STYLES = [
-  { id: 'adventurer', label: 'Adventurer' },
-  { id: 'adventurer-neutral', label: 'Neutral' },
-  { id: 'avataaars', label: 'Avataaars' },
-  { id: 'big-ears', label: 'Big Ears' },
-  { id: 'big-ears-neutral', label: 'Big Ears Alt' },
-  { id: 'bottts', label: 'Robots' },
-  { id: 'croodles', label: 'Croodles' },
-  { id: 'croodles-neutral', label: 'Croodles Alt' },
-  { id: 'fun-emoji', label: 'Fun Emoji' },
-  { id: 'icons', label: 'Icons' },
-  { id: 'lorelei', label: 'Lorelei' },
-  { id: 'micah', label: 'Micah' },
-  { id: 'miniavs', label: 'Mini Avatars' },
-  { id: 'open-peeps', label: 'Open Peeps' },
-  { id: 'personas', label: 'Personas' },
-  { id: 'pixel-art', label: 'Pixel Art' },
-  { id: 'thumbs', label: 'Thumbs' },
-  { id: 'notionists', label: 'Notionists' },
+  { id: "adventurer", label: "Adventurer" },
+  { id: "adventurer-neutral", label: "Neutral" },
+  { id: "avataaars", label: "Avataaars" },
+  { id: "big-ears", label: "Big Ears" },
+  { id: "big-ears-neutral", label: "Big Ears Alt" },
+  { id: "bottts", label: "Robots" },
+  { id: "croodles", label: "Croodles" },
+  { id: "croodles-neutral", label: "Croodles Alt" },
+  { id: "fun-emoji", label: "Fun Emoji" },
+  { id: "icons", label: "Icons" },
+  { id: "lorelei", label: "Lorelei" },
+  { id: "micah", label: "Micah" },
+  { id: "miniavs", label: "Mini Avatars" },
+  { id: "open-peeps", label: "Open Peeps" },
+  { id: "personas", label: "Personas" },
+  { id: "pixel-art", label: "Pixel Art" },
+  { id: "thumbs", label: "Thumbs" },
+  { id: "notionists", label: "Notionists" },
 ];
 
 const AVATAR_SEEDS = [
-  'gamer1', 'hero2', 'ninja3', 'wizard4', 'dragon5',
-  'phoenix6', 'star7', 'blaze8', 'shadow9', 'cyber10',
-  'pixel11', 'nova12', 'titan13', 'storm14', 'viper15',
-  'ace16', 'rogue17', 'spark18', 'bolt19', 'frost20',
+  "gamer1",
+  "hero2",
+  "ninja3",
+  "wizard4",
+  "dragon5",
+  "phoenix6",
+  "star7",
+  "blaze8",
+  "shadow9",
+  "cyber10",
+  "pixel11",
+  "nova12",
+  "titan13",
+  "storm14",
+  "viper15",
+  "ace16",
+  "rogue17",
+  "spark18",
+  "bolt19",
+  "frost20",
 ];
 
 function getAvatarUrl(style, seed, size = 96) {
@@ -50,11 +85,11 @@ function getAvatarUrl(style, seed, size = 96) {
 // ── Avatar Picker Modal ────────────────────────────────────────────────
 
 function AvatarPicker({ currentAvatar, onSelect, onClose }) {
-  const [selectedStyle, setSelectedStyle] = useState('adventurer');
+  const [selectedStyle, setSelectedStyle] = useState("adventurer");
   const [selectedUrl, setSelectedUrl] = useState(currentAvatar);
 
   const avatars = useMemo(() => {
-    return AVATAR_SEEDS.map(seed => ({
+    return AVATAR_SEEDS.map((seed) => ({
       seed,
       url: getAvatarUrl(selectedStyle, seed),
     }));
@@ -69,12 +104,12 @@ function AvatarPicker({ currentAvatar, onSelect, onClose }) {
       onClick={onClose}
     >
       <motion.div
-        initial={{ y: '100%' }}
+        initial={{ y: "100%" }}
         animate={{ y: 0 }}
-        exit={{ y: '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
         className="w-full max-w-lg bg-dark-800 border-t border-neon-cyan/20 rounded-t-3xl max-h-[85vh] flex flex-col"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-dark-500/30">
@@ -84,7 +119,10 @@ function AvatarPicker({ currentAvatar, onSelect, onClose }) {
           <div className="flex gap-2">
             {selectedUrl && (
               <button
-                onClick={() => { onSelect(selectedUrl); onClose(); }}
+                onClick={() => {
+                  onSelect(selectedUrl);
+                  onClose();
+                }}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-neon-cyan text-dark-900 text-xs font-bold"
               >
                 <Check size={14} /> Save
@@ -101,14 +139,15 @@ function AvatarPicker({ currentAvatar, onSelect, onClose }) {
 
         {/* Style selector */}
         <div className="flex gap-2 px-4 py-3 overflow-x-auto no-scrollbar border-b border-dark-500/20">
-          {AVATAR_STYLES.map(style => (
+          {AVATAR_STYLES.map((style) => (
             <button
               key={style.id}
               onClick={() => setSelectedStyle(style.id)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide transition-all
-                ${selectedStyle === style.id
-                  ? 'bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40'
-                  : 'bg-dark-600/50 text-dim border border-dark-500/30 hover:text-white/70'
+                ${
+                  selectedStyle === style.id
+                    ? "bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40"
+                    : "bg-dark-600/50 text-dim border border-dark-500/30 hover:text-white/70"
                 }`}
             >
               {style.label}
@@ -124,12 +163,13 @@ function AvatarPicker({ currentAvatar, onSelect, onClose }) {
                 key={`${selectedStyle}-${seed}`}
                 onClick={() => setSelectedUrl(url)}
                 className={`relative aspect-square rounded-xl overflow-hidden transition-all duration-200 active:scale-95
-                  ${selectedUrl === url
-                    ? 'ring-2 ring-neon-cyan ring-offset-2 ring-offset-dark-800 scale-105'
-                    : 'border border-dark-500/30 hover:border-neon-cyan/30'
+                  ${
+                    selectedUrl === url
+                      ? "ring-2 ring-neon-cyan ring-offset-2 ring-offset-dark-800 scale-105"
+                      : "border border-dark-500/30 hover:border-neon-cyan/30"
                   }`}
               >
-                <div className="w-full h-full bg-gradient-to-br from-dark-600 to-dark-700 p-1.5">
+                <div className="w-full h-full bg-linear-to-br from-dark-600 to-dark-700 p-1.5">
                   <img
                     src={url}
                     alt={`Avatar ${seed}`}
@@ -154,11 +194,21 @@ function AvatarPicker({ currentAvatar, onSelect, onClose }) {
 // ── Profile Page ───────────────────────────────────────────────────────
 
 export default function Profile() {
-  useDocumentTitle('Profile');
+  useDocumentTitle("Profile");
   const { theme, toggleTheme } = useTheme();
   const toast = useToast();
-  const { prefs, toggleSource, setAdShield, isSourceEnabled } = useSourcePrefs();
-  const { stats, updateUsername, updateAvatar, clearGameStat, clearAllStats, getTopGames, getRecentGames, getSessionStats } = usePlayerStats();
+  const { prefs, toggleSource, setAdShield, isSourceEnabled } =
+    useSourcePrefs();
+  const {
+    stats,
+    updateUsername,
+    updateAvatar,
+    clearGameStat,
+    clearAllStats,
+    getTopGames,
+    getRecentGames,
+    getSessionStats,
+  } = usePlayerStats();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(stats.username);
@@ -176,13 +226,13 @@ export default function Profile() {
   const topGames = getTopGames(5);
   const recentGames = getRecentGames(5);
 
-  const accountCreated = new Date(stats.created).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+  const accountCreated = new Date(stats.created).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
 
-  const defaultAvatar = getAvatarUrl('adventurer', stats.username || 'Player');
+  const defaultAvatar = getAvatarUrl("adventurer", stats.username || "Player");
   const avatarUrl = stats.avatar || defaultAvatar;
 
   return (
@@ -195,18 +245,24 @@ export default function Profile() {
       />
       {/* Profile Header Card */}
       <div className="px-4 pt-4 pb-2">
-        <div className="rounded-2xl overflow-hidden"
-             style={{
-               background: 'linear-gradient(135deg, rgba(0,245,255,0.08) 0%, rgba(191,0,255,0.08) 100%)',
-               border: '1px solid rgba(0,245,255,0.15)',
-             }}>
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(0,245,255,0.08) 0%, rgba(191,0,255,0.08) 100%)",
+            border: "1px solid rgba(0,245,255,0.15)",
+          }}
+        >
           {/* Banner gradient */}
           <div className="h-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/20 via-neon-purple/15 to-neon-pink/10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-dark-800/80 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-neon-cyan/20 via-neon-purple/15 to-neon-pink/10" />
+            <div className="absolute inset-0 bg-linear-to-t from-dark-800/80 to-transparent" />
             <div className="absolute top-3 right-3 flex gap-1">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full bg-neon-cyan/30" />
+                <div
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-neon-cyan/30"
+                />
               ))}
             </div>
           </div>
@@ -224,7 +280,9 @@ export default function Profile() {
                     src={avatarUrl}
                     alt="Avatar"
                     className="w-full h-full object-cover"
-                    onError={(e) => { e.target.src = defaultAvatar; }}
+                    onError={(e) => {
+                      e.target.src = defaultAvatar;
+                    }}
                   />
                 </div>
                 <div className="absolute inset-0 rounded-2xl bg-dark-900/60 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity flex items-center justify-center">
@@ -243,7 +301,7 @@ export default function Profile() {
                       type="text"
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSaveName()}
+                      onKeyDown={(e) => e.key === "Enter" && handleSaveName()}
                       className="min-w-0 flex-1 bg-dark-700 border border-neon-cyan/40 rounded-lg px-3 py-1.5 text-sm text-white outline-none focus:border-neon-cyan"
                       autoFocus
                       maxLength={20}
@@ -257,10 +315,15 @@ export default function Profile() {
                   </div>
                 ) : (
                   <div
-                    onClick={() => { setNewName(stats.username); setEditingName(true); }}
+                    onClick={() => {
+                      setNewName(stats.username);
+                      setEditingName(true);
+                    }}
                     className="cursor-pointer hover:opacity-80 transition-opacity"
                   >
-                    <h2 className="font-display text-xl font-bold text-white leading-tight">{stats.username}</h2>
+                    <h2 className="font-display text-xl font-bold text-white leading-tight">
+                      {stats.username}
+                    </h2>
                     <p className="text-[11px] text-dim mt-0.5 flex items-center gap-1">
                       <Shield size={10} /> Joined {accountCreated}
                     </p>
@@ -271,10 +334,31 @@ export default function Profile() {
 
             {/* Stats grid */}
             <div className="grid grid-cols-2 gap-2">
-              <StatCard icon={<Zap size={16} />} label="Games Played" value={session.gamesPlayed} color="cyan" />
-              <StatCard icon={<Clock size={16} />} label="Playtime" value={session.totalPlaytime} color="purple" />
-              <StatCard icon={<Heart size={16} />} label="Favorites" value={session.favoriteCount} color="pink" />
-              <StatCard icon={<TrendingUp size={16} />} label="Top Game" value={stats.mostPlayedGame?.title || 'None'} truncate color="green" />
+              <StatCard
+                icon={<Zap size={16} />}
+                label="Games Played"
+                value={session.gamesPlayed}
+                color="cyan"
+              />
+              <StatCard
+                icon={<Clock size={16} />}
+                label="Playtime"
+                value={session.totalPlaytime}
+                color="purple"
+              />
+              <StatCard
+                icon={<Heart size={16} />}
+                label="Favorites"
+                value={session.favoriteCount}
+                color="pink"
+              />
+              <StatCard
+                icon={<TrendingUp size={16} />}
+                label="Top Game"
+                value={stats.mostPlayedGame?.title || "None"}
+                truncate
+                color="green"
+              />
             </div>
           </div>
         </div>
@@ -284,12 +368,36 @@ export default function Profile() {
       <SectionHeader title="Badges" icon="🏅" />
       <div className="px-4 pb-2">
         <div className="flex gap-2 overflow-x-auto no-scrollbar">
-          <Badge emoji="🎮" label="First Play" unlocked={session.gamesPlayed >= 1} />
-          <Badge emoji="🔥" label="5 Games" unlocked={session.gamesPlayed >= 5} />
-          <Badge emoji="⚡" label="10 Games" unlocked={session.gamesPlayed >= 10} />
-          <Badge emoji="🏆" label="25 Games" unlocked={session.gamesPlayed >= 25} />
-          <Badge emoji="⏰" label="1 Hour" unlocked={session.totalPlaytimeMin >= 60} />
-          <Badge emoji="💎" label="5 Hours" unlocked={session.totalPlaytimeMin >= 300} />
+          <Badge
+            emoji="🎮"
+            label="First Play"
+            unlocked={session.gamesPlayed >= 1}
+          />
+          <Badge
+            emoji="🔥"
+            label="5 Games"
+            unlocked={session.gamesPlayed >= 5}
+          />
+          <Badge
+            emoji="⚡"
+            label="10 Games"
+            unlocked={session.gamesPlayed >= 10}
+          />
+          <Badge
+            emoji="🏆"
+            label="25 Games"
+            unlocked={session.gamesPlayed >= 25}
+          />
+          <Badge
+            emoji="⏰"
+            label="1 Hour"
+            unlocked={session.totalPlaytimeMin >= 60}
+          />
+          <Badge
+            emoji="💎"
+            label="5 Hours"
+            unlocked={session.totalPlaytimeMin >= 300}
+          />
         </div>
       </div>
 
@@ -305,26 +413,37 @@ export default function Profile() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
               >
-              <Link
-                to={`/game/${encodeURIComponent(game.id)}`}
-                className="flex items-center gap-3 p-3 rounded-xl bg-dark-700/50 border border-dark-500/20 hover:border-neon-cyan/20 transition-all"
-              >
-                <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-display font-bold
-                  ${i === 0 ? 'bg-neon-orange/20 text-neon-orange' : i === 1 ? 'bg-white/10 text-white/60' : i === 2 ? 'bg-neon-cyan/10 text-neon-cyan/60' : 'bg-dark-600 text-dim'}`}>
-                  {i + 1}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">{game.title}</p>
-                  <p className="text-[11px] text-dim mt-0.5">{game.plays} plays &bull; {Math.floor(game.totalTime / 60)}h {game.totalTime % 60}m</p>
-                </div>
-                <button
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); clearGameStat(game.id); }}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-dim hover:text-neon-orange hover:bg-dark-600/50 transition-all"
-                  title="Delete stats"
+                <Link
+                  to={`/game/${encodeURIComponent(game.id)}`}
+                  className="flex items-center gap-3 p-3 rounded-xl bg-dark-700/50 border border-dark-500/20 hover:border-neon-cyan/20 transition-all"
                 >
-                  <Trash2 size={14} />
-                </button>
-              </Link>
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-display font-bold
+                  ${i === 0 ? "bg-neon-orange/20 text-neon-orange" : i === 1 ? "bg-white/10 text-white/60" : i === 2 ? "bg-neon-cyan/10 text-neon-cyan/60" : "bg-dark-600 text-dim"}`}
+                  >
+                    {i + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white truncate">
+                      {game.title}
+                    </p>
+                    <p className="text-[11px] text-dim mt-0.5">
+                      {game.plays} plays &bull;{" "}
+                      {Math.floor(game.totalTime / 60)}h {game.totalTime % 60}m
+                    </p>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      clearGameStat(game.id);
+                    }}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg text-dim hover:text-neon-orange hover:bg-dark-600/50 transition-all"
+                    title="Delete stats"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -344,17 +463,22 @@ export default function Profile() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
                 >
-                <Link
-                  to={`/game/${encodeURIComponent(game.id)}`}
-                  className="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-dark-700/30 transition-colors"
-                >
-                  <div className="w-2 h-2 rounded-full bg-neon-green/50" />
-                  <p className="text-sm text-white/80 flex-1 truncate">{game.title}</p>
-                  <p className="text-[10px] text-dim">
-                    {new Date(game.lastPlayed).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                  </p>
-                  <ChevronRight size={12} className="text-dim" />
-                </Link>
+                  <Link
+                    to={`/game/${encodeURIComponent(game.id)}`}
+                    className="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-dark-700/30 transition-colors"
+                  >
+                    <div className="w-2 h-2 rounded-full bg-neon-green/50" />
+                    <p className="text-sm text-white/80 flex-1 truncate">
+                      {game.title}
+                    </p>
+                    <p className="text-[10px] text-dim">
+                      {new Date(game.lastPlayed).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
+                    <ChevronRight size={12} className="text-dim" />
+                  </Link>
                 </motion.div>
               ))}
             </div>
@@ -367,34 +491,43 @@ export default function Profile() {
       <div className="px-4 pb-2 space-y-2">
         <button
           onClick={() => setShowAvatarPicker(true)}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20 
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20
                      hover:border-neon-cyan/30 transition-all text-white/80"
         >
           <Palette size={18} className="text-neon-cyan" />
-          <span className="text-sm font-semibold flex-1 text-left">Change Avatar</span>
+          <span className="text-sm font-semibold flex-1 text-left">
+            Change Avatar
+          </span>
           <ChevronRight size={14} className="text-dim" />
         </button>
 
         <button
-          onClick={() => { setNewName(stats.username); setEditingName(true); }}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20 
+          onClick={() => {
+            setNewName(stats.username);
+            setEditingName(true);
+          }}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20
                      hover:border-neon-cyan/30 transition-all text-white/80"
         >
           <Shield size={18} className="text-neon-purple" />
-          <span className="text-sm font-semibold flex-1 text-left">Edit Username</span>
+          <span className="text-sm font-semibold flex-1 text-left">
+            Edit Username
+          </span>
           <ChevronRight size={14} className="text-dim" />
         </button>
 
         <button
           onClick={toggleTheme}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20 
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20
                      hover:border-neon-cyan/30 transition-all text-white/80"
         >
-          {theme === 'dark'
-            ? <Sun size={18} className="text-neon-orange" />
-            : <Moon size={18} className="text-neon-purple" />}
+          {theme === "dark" ? (
+            <Sun size={18} className="text-neon-orange" />
+          ) : (
+            <Moon size={18} className="text-neon-purple" />
+          )}
           <span className="text-sm font-semibold flex-1 text-left">
-            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
           </span>
           <ChevronRight size={14} className="text-dim" />
         </button>
@@ -402,19 +535,24 @@ export default function Profile() {
         <button
           onClick={async () => {
             const s = session;
-            const cardText = `🎮 ${stats.username}'s GameHub Profile\n\n⚡ ${s.gamesPlayed} games played\n⏰ ${s.totalPlaytime} playtime\n❤️ ${s.favoriteCount} favorites\n🏆 Top: ${stats.mostPlayedGame?.title || 'None'}\n\nPlay free games at GameHub!`;
+            const cardText = `🎮 ${stats.username}'s GameHub Profile\n\n⚡ ${s.gamesPlayed} games played\n⏰ ${s.totalPlaytime} playtime\n❤️ ${s.favoriteCount} favorites\n🏆 Top: ${stats.mostPlayedGame?.title || "None"}\n\nPlay free games at GameHub!`;
             try {
-              await navigator.share({ title: `${stats.username}'s Profile`, text: cardText });
+              await navigator.share({
+                title: `${stats.username}'s Profile`,
+                text: cardText,
+              });
             } catch {
               await navigator.clipboard?.writeText(cardText);
-              toast('Profile copied to clipboard!', 'success');
+              toast("Profile copied to clipboard!", "success");
             }
           }}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20 
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-dark-500/20
                      hover:border-neon-cyan/30 transition-all text-white/80"
         >
           <Share2 size={18} className="text-neon-green" />
-          <span className="text-sm font-semibold flex-1 text-left">Share Profile Card</span>
+          <span className="text-sm font-semibold flex-1 text-left">
+            Share Profile Card
+          </span>
           <ChevronRight size={14} className="text-dim" />
         </button>
       </div>
@@ -423,27 +561,36 @@ export default function Profile() {
       <SectionHeader title="Game Sources" icon="🌐" />
       <div className="px-4 pb-2 space-y-2">
         <p className="text-[11px] text-dim px-1 -mt-1 mb-2">
-          Disable ad-heavy sources to improve your experience. Games from disabled sources won’t appear.
+          Disable ad-heavy sources to improve your experience. Games from
+          disabled sources won’t appear.
         </p>
-        {SOURCES.filter(s => s.key).map(src => {
+        {SOURCES.filter((s) => s.key).map((src) => {
           const enabled = isSourceEnabled(src.slug);
           return (
             <button
               key={src.slug}
               onClick={() => toggleSource(src.slug)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all
-                ${enabled
-                  ? 'bg-dark-700/50 border-dark-500/20 text-white/80 hover:border-neon-cyan/30'
-                  : 'bg-dark-800/50 border-neon-orange/15 text-dim'}`}
+                ${
+                  enabled
+                    ? "bg-dark-700/50 border-dark-500/20 text-white/80 hover:border-neon-cyan/30"
+                    : "bg-dark-800/50 border-neon-orange/15 text-dim"
+                }`}
             >
               <span className="text-lg">{src.icon}</span>
-              <span className="text-sm font-semibold flex-1 text-left">{src.label}</span>
-              {src.slug === 'gamemonetize' && (
-                <span className="text-[9px] px-1.5 py-0.5 rounded bg-neon-orange/15 text-neon-orange font-bold uppercase tracking-wider">Heavy Ads</span>
+              <span className="text-sm font-semibold flex-1 text-left">
+                {src.label}
+              </span>
+              {src.slug === "gamemonetize" && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded bg-neon-orange/15 text-neon-orange font-bold uppercase tracking-wider">
+                  Heavy Ads
+                </span>
               )}
-              {enabled
-                ? <ToggleRight size={22} className="text-neon-green" />
-                : <ToggleLeft size={22} className="text-dim" />}
+              {enabled ? (
+                <ToggleRight size={22} className="text-neon-green" />
+              ) : (
+                <ToggleLeft size={22} className="text-dim" />
+              )}
             </button>
           );
         })}
@@ -453,20 +600,41 @@ export default function Profile() {
       <SectionHeader title="Ad Shield" icon="🛡️" />
       <div className="px-4 pb-2 space-y-2">
         <p className="text-[11px] text-dim px-1 -mt-1 mb-2">
-          Blocks popup ads, redirects, and unwanted overlays inside games. Higher levels may break some games.
+          Blocks popup ads, redirects, and unwanted overlays inside games.
+          Higher levels may break some games.
         </p>
         {[
-          { level: 'off', label: 'Off', desc: 'No restrictions — games load as-is', Icon: ShieldOff, color: 'text-dim' },
-          { level: 'light', label: 'Light', desc: 'Blocks popups & redirects (recommended)', Icon: ShieldCheck, color: 'text-neon-green' },
-          { level: 'strict', label: 'Strict', desc: 'Max isolation — may break some games', Icon: ShieldAlert, color: 'text-neon-orange' },
+          {
+            level: "off",
+            label: "Off",
+            desc: "No restrictions — games load as-is",
+            Icon: ShieldOff,
+            color: "text-dim",
+          },
+          {
+            level: "light",
+            label: "Light",
+            desc: "Blocks popups & redirects (recommended)",
+            Icon: ShieldCheck,
+            color: "text-neon-green",
+          },
+          {
+            level: "strict",
+            label: "Strict",
+            desc: "Max isolation — may break some games",
+            Icon: ShieldAlert,
+            color: "text-neon-orange",
+          },
         ].map(({ level, label, desc, Icon, color }) => (
           <button
             key={level}
             onClick={() => setAdShield(level)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all
-              ${prefs.adShield === level
-                ? 'bg-neon-cyan/5 border-neon-cyan/30 text-white'
-                : 'bg-dark-700/50 border-dark-500/20 text-white/70 hover:border-neon-cyan/20'}`}
+              ${
+                prefs.adShield === level
+                  ? "bg-neon-cyan/5 border-neon-cyan/30 text-white"
+                  : "bg-dark-700/50 border-dark-500/20 text-white/70 hover:border-neon-cyan/20"
+              }`}
           >
             <Icon size={18} className={color} />
             <div className="flex-1 text-left">
@@ -485,11 +653,13 @@ export default function Profile() {
       <div className="px-4 pb-8 space-y-2">
         <button
           onClick={() => setConfirmClearAll(true)}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-neon-orange/20 
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-dark-700/50 border border-neon-orange/20
                      hover:border-neon-orange/50 transition-all text-neon-orange"
         >
           <Trash2 size={18} />
-          <span className="text-sm font-semibold flex-1 text-left">Clear All Data</span>
+          <span className="text-sm font-semibold flex-1 text-left">
+            Clear All Data
+          </span>
           <ChevronRight size={14} />
         </button>
         <p className="text-[11px] text-dim px-4">
@@ -523,9 +693,12 @@ export default function Profile() {
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-dark-800 border border-neon-orange/30 rounded-2xl p-6 max-w-xs w-full"
             >
-              <h3 className="font-display text-lg font-bold text-white mb-2">Clear All Data?</h3>
+              <h3 className="font-display text-lg font-bold text-white mb-2">
+                Clear All Data?
+              </h3>
               <p className="text-sm text-dim mb-6">
-                Your profile, game stats, favorites, and all saved data will be permanently deleted.
+                Your profile, game stats, favorites, and all saved data will be
+                permanently deleted.
               </p>
               <div className="flex gap-3">
                 <button
@@ -554,22 +727,26 @@ export default function Profile() {
 
 // ── Sub-components ─────────────────────────────────────────────────────
 
-function StatCard({ icon, label, value, truncate, color = 'cyan' }) {
+function StatCard({ icon, label, value, truncate, color = "cyan" }) {
   const colorMap = {
-    cyan: 'text-neon-cyan',
-    purple: 'text-neon-purple',
-    pink: 'text-neon-pink',
-    green: 'text-neon-green',
-    orange: 'text-neon-orange',
+    cyan: "text-neon-cyan",
+    purple: "text-neon-purple",
+    pink: "text-neon-pink",
+    green: "text-neon-green",
+    orange: "text-neon-orange",
   };
 
   return (
     <div className="rounded-xl bg-dark-800/60 border border-dark-500/15 p-3">
       <div className="flex items-center gap-1.5 mb-1.5">
-        <span className={colorMap[color] || 'text-neon-cyan'}>{icon}</span>
-        <p className="text-[10px] text-dim font-semibold uppercase tracking-wider">{label}</p>
+        <span className={colorMap[color] || "text-neon-cyan"}>{icon}</span>
+        <p className="text-[10px] text-dim font-semibold uppercase tracking-wider">
+          {label}
+        </p>
       </div>
-      <p className={`text-base font-display font-bold text-white ${truncate ? 'line-clamp-1 text-sm' : ''}`}>
+      <p
+        className={`text-base font-display font-bold text-white ${truncate ? "line-clamp-1 text-sm" : ""}`}
+      >
         {value}
       </p>
     </div>
@@ -578,14 +755,18 @@ function StatCard({ icon, label, value, truncate, color = 'cyan' }) {
 
 function Badge({ emoji, label, unlocked }) {
   return (
-    <div className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all
-      ${unlocked
-        ? 'bg-neon-cyan/5 border-neon-cyan/20'
-        : 'bg-dark-700/30 border-dark-500/20 opacity-40 grayscale'
+    <div
+      className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all
+      ${
+        unlocked
+          ? "bg-neon-cyan/5 border-neon-cyan/20"
+          : "bg-dark-700/30 border-dark-500/20 opacity-40 grayscale"
       }`}
     >
       <span className="text-xl">{emoji}</span>
-      <span className="text-[9px] font-display font-bold text-dim tracking-wider uppercase whitespace-nowrap">{label}</span>
+      <span className="text-[9px] font-display font-bold text-dim tracking-wider uppercase whitespace-nowrap">
+        {label}
+      </span>
     </div>
   );
 }

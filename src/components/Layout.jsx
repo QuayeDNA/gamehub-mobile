@@ -1,19 +1,32 @@
-import React, { useState, useEffect, useSyncExternalStore } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Search, Grid3X3, Heart, User, Gamepad2, Menu, X, ChevronLeft, WifiOff } from 'lucide-react';
+import React, { useState, useEffect, useSyncExternalStore } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Home,
+  Search,
+  Grid3X3,
+  Heart,
+  User,
+  Gamepad2,
+  Menu,
+  X,
+  ChevronLeft,
+  WifiOff,
+} from "lucide-react";
 
 // ── Online Status Hook ──────────────────────────────────────────────────
 
 function subscribeOnline(cb) {
-  window.addEventListener('online', cb);
-  window.addEventListener('offline', cb);
+  window.addEventListener("online", cb);
+  window.addEventListener("offline", cb);
   return () => {
-    window.removeEventListener('online', cb);
-    window.removeEventListener('offline', cb);
+    window.removeEventListener("online", cb);
+    window.removeEventListener("offline", cb);
   };
 }
-function getOnlineSnapshot() { return navigator.onLine; }
+function getOnlineSnapshot() {
+  return navigator.onLine;
+}
 
 export function useOnlineStatus() {
   return useSyncExternalStore(subscribeOnline, getOnlineSnapshot, () => true);
@@ -26,20 +39,26 @@ export function OfflineBanner() {
   const [dismissed, setDismissed] = useState(false);
 
   // Reset dismissed when coming back online then going offline again
-  useEffect(() => { if (online) setDismissed(false); }, [online]);
+  useEffect(() => {
+    if (online) setDismissed(false);
+  }, [online]);
 
   if (online || dismissed) return null;
 
   return (
     <motion.div
       initial={{ height: 0, opacity: 0 }}
-      animate={{ height: 'auto', opacity: 1 }}
+      animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
       className="bg-orange-500/90 text-dark-900 text-xs font-bold text-center px-4 py-2 flex items-center justify-center gap-2"
     >
       <WifiOff size={14} />
       You're offline — cached games still available
-      <button onClick={() => setDismissed(true)} className="ml-2 opacity-70 hover:opacity-100" aria-label="Dismiss">
+      <button
+        onClick={() => setDismissed(true)}
+        className="ml-2 opacity-70 hover:opacity-100"
+        aria-label="Dismiss"
+      >
         <X size={14} />
       </button>
     </motion.div>
@@ -49,30 +68,31 @@ export function OfflineBanner() {
 // ── Bottom Navigation ───────────────────────────────────────────────────
 
 const NAV_ITEMS = [
-  { icon: Home, label: 'Home', to: '/', key: 'home' },
-  { icon: Search, label: 'Search', to: '/search', key: 'search' },
-  { icon: Grid3X3, label: 'Browse', to: '/browse', key: 'browse' },
-  { icon: Heart, label: 'Favorites', to: '/favorites', key: 'favorites' },
-  { icon: User, label: 'Profile', to: '/profile', key: 'profile' },
+  { icon: Home, label: "Home", to: "/", key: "home" },
+  { icon: Search, label: "Search", to: "/search", key: "search" },
+  { icon: Grid3X3, label: "Browse", to: "/browse", key: "browse" },
+  { icon: Heart, label: "Favorites", to: "/favorites", key: "favorites" },
+  { icon: User, label: "Profile", to: "/profile", key: "profile" },
 ];
 
 export function BottomNav() {
   const location = useLocation();
-  
+
   const getActive = () => {
     const path = location.pathname;
-    if (path === '/') return 'home';
-    if (path.startsWith('/search')) return 'search';
-    if (path.startsWith('/browse') || path.startsWith('/category')) return 'browse';
-    if (path.startsWith('/favorites')) return 'favorites';
-    if (path.startsWith('/profile')) return 'profile';
-    return '';
+    if (path === "/") return "home";
+    if (path.startsWith("/search")) return "search";
+    if (path.startsWith("/browse") || path.startsWith("/category"))
+      return "browse";
+    if (path.startsWith("/favorites")) return "favorites";
+    if (path.startsWith("/profile")) return "profile";
+    return "";
   };
 
   const active = getActive();
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-lg z-50 glass-heavy border-t border-neon-cyan/10">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-lg md:max-w-3xl lg:max-w-4xl z-50 glass-heavy border-t border-neon-cyan/10">
       <div className="flex justify-around items-center px-2 pt-2 safe-bottom">
         {NAV_ITEMS.map(({ icon: Icon, label, to, key }) => {
           const isActive = active === key;
@@ -81,9 +101,9 @@ export function BottomNav() {
               key={key}
               to={to}
               className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200 active:scale-90 min-w-[60px]
-                ${isActive ? 'text-neon-cyan' : 'text-dim hover:text-white/70'}`}
+                ${isActive ? "text-neon-cyan" : "text-dim hover:text-white/70"}`}
               aria-label={label}
-              aria-current={isActive ? 'page' : undefined}
+              aria-current={isActive ? "page" : undefined}
             >
               <div className="relative">
                 <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />
@@ -91,11 +111,13 @@ export function BottomNav() {
                   <motion.div
                     layoutId="nav-glow"
                     className="absolute -inset-2 bg-neon-cyan/10 rounded-full blur-md -z-10"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
               </div>
-              <span className={`text-[10px] font-semibold tracking-wide ${isActive ? 'text-neon-cyan' : ''}`}>
+              <span
+                className={`text-[10px] font-semibold tracking-wide ${isActive ? "text-neon-cyan" : ""}`}
+              >
                 {label}
               </span>
             </Link>
@@ -108,12 +130,20 @@ export function BottomNav() {
 
 // ── Top Header ──────────────────────────────────────────────────────────
 
-export function Header({ title, showBack = false, showSearch = true, transparent = false, rightAction = null }) {
+export function Header({
+  title,
+  showBack = false,
+  showSearch = true,
+  transparent = false,
+  rightAction = null,
+}) {
   const navigate = useNavigate();
 
   return (
-    <header className={`sticky top-0 z-40 transition-colors duration-300
-      ${transparent ? 'bg-transparent' : 'glass-heavy border-b border-neon-cyan/10'}`}>
+    <header
+      className={`sticky top-0 z-40 transition-colors duration-300
+      ${transparent ? "bg-transparent" : "glass-heavy border-b border-neon-cyan/10"}`}
+    >
       <div className="flex items-center gap-3 px-4 py-3">
         {showBack ? (
           <button
@@ -124,11 +154,17 @@ export function Header({ title, showBack = false, showSearch = true, transparent
             <ChevronLeft size={20} />
           </button>
         ) : (
-          <Link to="/" className="flex items-center gap-0.5" aria-label="GameHub Home">
+          <Link
+            to="/"
+            className="flex items-center gap-0.5"
+            aria-label="GameHub Home"
+          >
             <Gamepad2 size={24} className="text-neon-cyan" />
             <span className="font-display text-lg font-black tracking-wider">
               <span className="text-neon-cyan text-neon-glow">GAME</span>
-              <span className="text-neon-purple text-neon-purple-glow">HUB</span>
+              <span className="text-neon-purple text-neon-purple-glow">
+                HUB
+              </span>
             </span>
           </Link>
         )}
@@ -162,12 +198,12 @@ export function Header({ title, showBack = false, showSearch = true, transparent
 export function PageLayout({ children, header, hideNav = false }) {
   return (
     <div className="min-h-screen bg-dark-900">
-      <div className="max-w-lg mx-auto min-h-screen relative">
-        <AnimatePresence><OfflineBanner /></AnimatePresence>
+      <div className="max-w-lg md:max-w-3xl lg:max-w-4xl mx-auto min-h-screen relative">
+        <AnimatePresence>
+          <OfflineBanner />
+        </AnimatePresence>
         {header}
-        <main className={hideNav ? 'pb-4' : 'pb-20'}>
-          {children}
-        </main>
+        <main className={hideNav ? "pb-4" : "pb-20"}>{children}</main>
         {!hideNav && <BottomNav />}
       </div>
     </div>
@@ -176,9 +212,17 @@ export function PageLayout({ children, header, hideNav = false }) {
 
 // ── Section Header ──────────────────────────────────────────────────────
 
-export function SectionHeader({ title, icon, actionLabel, actionTo, className = '' }) {
+export function SectionHeader({
+  title,
+  icon,
+  actionLabel,
+  actionTo,
+  className = "",
+}) {
   return (
-    <div className={`flex items-center justify-between px-4 pt-6 pb-3 ${className}`}>
+    <div
+      className={`flex items-center justify-between px-4 pt-6 pb-3 ${className}`}
+    >
       <h2 className="flex items-center gap-2 font-display text-sm font-bold text-white/90 tracking-wider uppercase">
         {icon && <span className="text-lg">{icon}</span>}
         {title}
@@ -188,7 +232,7 @@ export function SectionHeader({ title, icon, actionLabel, actionTo, className = 
           to={actionTo}
           className="text-xs font-semibold text-neon-cyan/70 hover:text-neon-cyan transition-colors tracking-wide"
         >
-          {actionLabel || 'See All'} →
+          {actionLabel || "See All"} →
         </Link>
       )}
     </div>
@@ -199,12 +243,15 @@ export function SectionHeader({ title, icon, actionLabel, actionTo, className = 
 
 export function CategoryPills({ categories, active, onSelect }) {
   return (
-    <div className="flex gap-2 px-4 overflow-x-auto no-scrollbar py-2" role="tablist">
-      {categories.map(cat => (
+    <div
+      className="flex gap-2 px-4 overflow-x-auto no-scrollbar py-2"
+      role="tablist"
+    >
+      {categories.map((cat) => (
         <button
           key={cat.slug}
           onClick={() => onSelect(cat.slug)}
-          className={`pill ${active === cat.slug ? 'pill-active' : ''}`}
+          className={`pill ${active === cat.slug ? "pill-active" : ""}`}
           role="tab"
           aria-selected={active === cat.slug}
         >
@@ -219,22 +266,24 @@ export function CategoryPills({ categories, active, onSelect }) {
 // ── Sort Bar ────────────────────────────────────────────────────────
 
 const SORT_OPTIONS = [
-  { value: 'default', label: 'Default' },
-  { value: 'a-z', label: 'A → Z' },
-  { value: 'z-a', label: 'Z → A' },
+  { value: "default", label: "Default" },
+  { value: "a-z", label: "A → Z" },
+  { value: "z-a", label: "Z → A" },
 ];
 
 export function SortBar({ value, onChange }) {
   return (
     <div className="flex items-center gap-2 px-4 py-2">
-      {SORT_OPTIONS.map(opt => (
+      {SORT_OPTIONS.map((opt) => (
         <button
           key={opt.value}
           onClick={() => onChange(opt.value)}
           className={`text-[10px] font-display font-bold tracking-wider px-3 py-1.5 rounded-lg transition-all
-            ${value === opt.value
-              ? 'bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30'
-              : 'bg-dark-700/40 text-dim border border-dark-500/20 hover:text-white/70'}`}
+            ${
+              value === opt.value
+                ? "bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30"
+                : "bg-dark-700/40 text-dim border border-dark-500/20 hover:text-white/70"
+            }`}
         >
           {opt.label}
         </button>
@@ -245,7 +294,7 @@ export function SortBar({ value, onChange }) {
 
 // ── Empty State ─────────────────────────────────────────────────────────
 
-export function EmptyState({ icon = '🕹️', title, message, action }) {
+export function EmptyState({ icon = "🕹️", title, message, action }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -253,7 +302,9 @@ export function EmptyState({ icon = '🕹️', title, message, action }) {
       className="flex flex-col items-center justify-center py-20 px-8 text-center"
     >
       <div className="text-5xl mb-4 animate-float">{icon}</div>
-      <h3 className="font-display text-lg font-bold text-white/80 mb-2">{title}</h3>
+      <h3 className="font-display text-lg font-bold text-white/80 mb-2">
+        {title}
+      </h3>
       {message && <p className="text-sm text-dim max-w-xs">{message}</p>}
       {action}
     </motion.div>
@@ -276,7 +327,7 @@ export function SkeletonCard() {
 
 export function SkeletonGrid({ count = 6 }) {
   return (
-    <div className="grid grid-cols-2 gap-3 px-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 px-4">
       {Array.from({ length: count }).map((_, i) => (
         <SkeletonCard key={i} />
       ))}

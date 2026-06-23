@@ -3,13 +3,14 @@
  * Tracks: games played, playtime, achievements, preferences
  */
 
-import React from 'react';
+import React, { useCallback, useEffect } from "react";
 
-const STATS_KEY = 'playerProfile_v1';
+const STATS_KEY = "playerProfile_v1";
+const STATS_EVENT = "gamehub:stats-updated";
 
 // Default player stats
 const defaultStats = {
-  username: 'Player',
+  username: "Player",
   avatar: null, // DiceBear avatar URL
   created: new Date().toISOString(),
   gamesPlayed: 0,
@@ -33,7 +34,7 @@ function saveStats(stats) {
   try {
     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
   } catch (e) {
-    console.error('Failed to save player stats:', e);
+    console.error("Failed to save player stats:", e);
   }
 }
 
@@ -46,7 +47,12 @@ export function trackGamePlay(gameId, title, playtimeSecs = 0) {
   const playteimeMin = Math.max(1, Math.round(playtimeSecs / 60)); // min 1 min
 
   if (!stats.gameStats[gameId]) {
-    stats.gameStats[gameId] = { plays: 0, totalTime: 0, lastPlayed: null, title };
+    stats.gameStats[gameId] = {
+      plays: 0,
+      totalTime: 0,
+      lastPlayed: null,
+      title,
+    };
     stats.gamesPlayed += 1;
   }
 
@@ -67,6 +73,7 @@ export function trackGamePlay(gameId, title, playtimeSecs = 0) {
   stats.mostPlayedGame = mostPlayed;
 
   saveStats(stats);
+  window.dispatchEvent(new CustomEvent(STATS_EVENT));
 }
 
 /**
@@ -75,7 +82,12 @@ export function trackGamePlay(gameId, title, playtimeSecs = 0) {
 export function usePlayerStats() {
   const [stats, setStats] = React.useState(() => getStats());
 
-  const refetch = () => setStats(getStats());
+  const refetch = useCallback(() => setStats(getStats()), []);
+
+  useEffect(() => {
+    window.addEventListener(STATS_EVENT, refetch);
+    return () => window.removeEventListener(STATS_EVENT, refetch);
+  }, [refetch]);
 
   const updateUsername = (name) => {
     const s = getStats();
@@ -119,7 +131,7 @@ export function usePlayerStats() {
   const getRecentGames = (limit = 5) => {
     return Object.entries(stats.gameStats)
       .map(([id, data]) => ({ id, ...data }))
-      .filter(g => g.lastPlayed)
+      .filter((g) => g.lastPlayed)
       .sort((a, b) => new Date(b.lastPlayed) - new Date(a.lastPlayed))
       .slice(0, limit);
   };
@@ -131,9 +143,11 @@ export function usePlayerStats() {
     // Read favorite count from the canonical favorites store
     let favCount = 0;
     try {
-      const favs = JSON.parse(localStorage.getItem('gamehub_favorites'));
+      const favs = JSON.parse(localStorage.getItem("gamehub_favorites"));
       favCount = Array.isArray(favs) ? favs.length : 0;
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     return {
       gamesPlayed: played,
       totalPlaytime: `${hours}h ${mins}m`,
