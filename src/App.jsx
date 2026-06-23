@@ -1,4 +1,4 @@
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { useEffect, lazy, Suspense, useState, useRef } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -7,10 +7,12 @@ import {
   useNavigationType,
   Link,
 } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ToastProvider } from "./components/Toast";
 import { ThemeProvider } from "./hooks/useTheme";
 import Onboarding from "./components/Onboarding";
+import PingPongLoader from "./components/PingPongLoader";
 
 // Lazy-loaded page components — each becomes its own chunk
 const Home = lazy(() => import("./pages/Home"));
@@ -33,17 +35,40 @@ function ScrollToTop() {
   return null;
 }
 
-/** Route loading fallback */
-function RouteFallback() {
+/** Shows PingPongLoader on every client-side navigation */
+function NavigationLoader() {
+  const location = useLocation();
+  const [visible, setVisible] = useState(false);
+  const prevPath = useRef(location.pathname);
+
+  useEffect(() => {
+    if (location.pathname !== prevPath.current) {
+      prevPath.current = location.pathname;
+      setVisible(true);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!visible) return;
+    const timer = setTimeout(() => setVisible(false), 350);
+    return () => clearTimeout(timer);
+  }, [visible]);
+
   return (
-    <div className="min-h-screen bg-dark-900 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3">
-        <div className="w-10 h-10 border-2 border-neon-cyan/30 border-t-neon-cyan rounded-full animate-spin" />
-        <span className="font-display text-xs text-neon-cyan/60 tracking-widest animate-pulse">
-          LOADING
-        </span>
-      </div>
-    </div>
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          key="nav-loader"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          className="fixed inset-0 z-100"
+        >
+          <PingPongLoader />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -70,7 +95,8 @@ export default function App() {
         <ToastProvider>
           <ScrollToTop />
           <ErrorBoundary>
-            <Suspense fallback={<RouteFallback />}>
+            <NavigationLoader />
+            <Suspense fallback={<PingPongLoader />}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/game/:id" element={<GameDetail />} />
