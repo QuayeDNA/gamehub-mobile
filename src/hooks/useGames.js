@@ -168,6 +168,13 @@ export function useInfiniteGames({ category = 'all', perPage = 30, source = null
         return true;
       });
 
+      if (unique.length === 0) {
+        setHasMore(false);
+        loadingRef.current = false;
+        setLoadingMore(false);
+        return;
+      }
+
       setGames(prev => {
         const merged = [...prev, ...unique];
         saveToCache(merged, next, seenRef.current, !done);
