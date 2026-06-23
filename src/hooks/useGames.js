@@ -227,32 +227,34 @@ export function useInfiniteGames({ category = 'all', perPage = 30, source = null
 
 export function useIntersectionLoader(loadMore, hasMore, loading) {
   const sentinelRef = useRef(null);
-  const throttleRef = useRef(false);
+  const cooldownRef = useRef(false);
 
   useEffect(() => {
     if (!hasMore || loading) return;
     const el = sentinelRef.current;
     if (!el) return;
 
-    let timer;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !throttleRef.current) {
-          throttleRef.current = true;
+        if (entry.isIntersecting && !cooldownRef.current) {
+          cooldownRef.current = true;
           loadMore();
-          timer = setTimeout(() => { throttleRef.current = false; }, 300);
         }
       },
       { rootMargin: '400px' }
     );
     observer.observe(el);
-    return () => {
-      observer.disconnect();
-      clearTimeout(timer);
-      throttleRef.current = false;
-    };
+    return () => observer.disconnect();
   }, [loadMore, hasMore, loading]);
+
+  // Separate cooldown: resets 300ms after loading finishes, preventing
+  // rapid re-fire when loadMore completes quickly (cached/error responses).
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => { cooldownRef.current = false; }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   return sentinelRef;
 }

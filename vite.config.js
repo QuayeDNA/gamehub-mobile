@@ -114,12 +114,6 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/gm/, ""),
         secure: false,
       },
-      "/api/hg": {
-        target: "https://www.htmlgames.com",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/hg/, ""),
-        secure: false,
-      },
       "/api/hg-proxy": {
         target: "https://www.htmlgames.com",
         changeOrigin: true,
